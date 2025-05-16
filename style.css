@@ -1,15 +1,17 @@
+/* General Page Styling */
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fff9f3;
+    background-color: #fffaf5;
     color: #333;
     line-height: 1.6;
   }
   
+  /* Header */
   header {
-    background-color: #ffdde1;
-    padding: 2rem 1rem;
+    background-color: #ffdce1;
+    padding: 2rem 1rem 1rem;
     text-align: center;
   }
   
@@ -19,47 +21,126 @@ body {
   }
   
   header p {
-    margin: 0.5rem 0 0;
+    margin: 0.5rem 0 1rem;
     font-size: 1.2rem;
+    color: #444;
+  }
+
+  nav {
+    margin-top: 1rem;
   }
   
+  .nav-tab {
+    display: inline-block;
+    margin: 0 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    background-color: #ffffff;
+    color: #d45c96;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #d45c96;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .nav-tab:hover {
+    background-color: #d45c96;
+    color: #ffffff;
+  }
+  
+  
+  nav {
+    margin-top: 0.5rem;
+  }
+  
+  /* nav a {
+    text-decoration: none;
+    color: #d45c96;
+    font-weight: bold;
+    margin: 0 0.75rem;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  } */
+  
+  /* Main Content */
   main {
     padding: 2rem 1rem;
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
   }
   
+  /* Sections */
   section {
     margin-bottom: 2.5rem;
   }
   
   h2 {
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
     color: #d45c96;
   }
   
-  .image-grid {
+  h3 {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  /* Categories on About Page */
+  .category {
+    margin-bottom: 2rem;
+  }
+  
+  .category img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin-top: 0.5rem;
+  }
+  
+  /* Product Grid on Shop Page */
+  .product-grid {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 1rem;
+    gap: 2rem;
   }
   
-  .image-grid img {
-    width: 150px;
-    height: 150px;
+  .product {
+    background-color: #fff;
+    padding: 1rem;
+    width: 220px;
+    text-align: center;
     border-radius: 12px;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
   
+  .product img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  /* Contact Section */
+  .contact a {
+    color: #d45c96;
+    font-weight: bold;
+  }
+  
+  /* Footer */
   footer {
-    background-color: #ffe6f0;
+    background-color: #ffeef2;
     padding: 1rem;
     text-align: center;
     font-size: 0.9rem;
     margin-top: 2rem;
+    color: #666;
   }
   

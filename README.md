@@ -30,7 +30,6 @@ tang-shop-site/
 ├── style.css # Styling   
 └── images/ # Sample or product images
 
-
 ---
 
 ## 👩‍👧 About Zitang & Mom
