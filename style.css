@@ -70,6 +70,31 @@ h3 {
   display: block;
 }
 
+/* Nav Tabs */
+.nav-tabs {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  gap: 0.1rem;
+}
+
+.nav-tabs a {
+  color: #5b595a;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.3s;
+}
+
+.nav-tabs a:hover {
+  background-color: #fff0f3;
+}
+
+
+
 .copyright {
   text-align: center;
   font-size: 1rem;
