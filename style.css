@@ -3,11 +3,11 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fffaf5;
+    /* background-color: #fffaf5; */
     color: #333;
     line-height: 1.6;
 }
-  
+
 /* Header */
 header {
   background-color: #ffdce1;
@@ -25,8 +25,6 @@ header p {
   font-size: 1.2rem;
   color: #444;
 }
-
-
 
 /* Main Content */
 main {
@@ -53,20 +51,35 @@ h3 {
   color: #444;
 }
 
+/* -------------------------- */
 
-/* Contact Section */
+/* Landing page */
+.logo-nav {
+  height: 85vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.logo-nav img.logo {
+  max-width: auto;
+  max-height: 100%;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+}
+
+
+/* Contact Page */
 .contact a {
   color: #d45c96;
   font-weight: bold;
 }
 
-/* Footer */
-footer {
-  background-color: #ffeef2;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 2rem;
-  color: #666;
-}
+
   
