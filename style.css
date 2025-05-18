@@ -93,9 +93,8 @@ h3 {
   padding: 0.5rem 0.5rem;
 }
 
-/* -------------------------- */
+/* -------------Landing page ------------- */
 
-/* Landing page */
 .home-logo {
   height: 90vh; /* Full viewport height */
   width: 100vw;  /* Full viewport width */
@@ -135,13 +134,13 @@ h3 {
   padding: 1rem 0rem;
 }
 
-/* -------------------------------------------- */
+/* ---------------------Contact Page----------------------- */
 
-/* Contact Page */
 .contact a {
   color: #d45c96;
   font-weight: bold;
 }
 
+/* ---------------------Shop page----------------------- */
 
   
