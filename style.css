@@ -73,6 +73,11 @@ h3 {
   background-color: #fff0f3;
 }
 
+.nav-tabs a.current-tab{
+  /* background-color: #fff0f3; */
+  color: #d45c96;
+}
+
 .logo-header {
   height: auto; /* Full viewport height */
   width: 100vw;  /* Full viewport width */
