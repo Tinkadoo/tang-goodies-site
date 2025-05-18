@@ -92,7 +92,7 @@ h3 {
 
 /* Landing page */
 .home-logo {
-  height: 85vh; /* Full viewport height */
+  height: 90vh; /* Full viewport height */
   width: 100vw;  /* Full viewport width */
   display: flex;
   justify-content: center;
@@ -127,6 +127,7 @@ h3 {
   text-align: center;
   font-size: 1rem;
   color: #666;
+  padding: 1rem 0rem;
 }
 
 /* -------------------------------------------- */
