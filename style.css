@@ -142,5 +142,42 @@ h3 {
 }
 
 /* ---------------------Shop page----------------------- */
+.product-list {
+  padding: 2rem;
+  text-align: center;
+}
 
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.product-card {
+  background: #ffeef2;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.product-image {
+  background-color: #fcd5e0;
+  height: 150px;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.product-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.product-price {
+  color: #d45c96;
+  font-size: 1rem;
+}
   
