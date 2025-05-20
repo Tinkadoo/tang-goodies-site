@@ -134,6 +134,37 @@ h3 {
   padding: 1rem 0rem;
 }
 
+/* --------------------- About Us page --------------------- */
+.about-container {
+  padding: 2rem 1.5rem;
+  max-width: 800px;
+  margin: auto;
+  background-color: #fff6f8;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.about-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #d45c96;
+  margin-bottom: 1.5rem;
+}
+
+.about-card p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.about-thanks {
+  text-align: center;
+  font-weight: bold;
+  color: #d45c96;
+  font-size: 1.15rem;
+}
+
 /* ---------------------Contact Page----------------------- */
 
 .contact a {
