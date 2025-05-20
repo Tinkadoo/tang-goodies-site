@@ -30,26 +30,42 @@
   <main>
     <section class="product-list">
         <div class="product-grid">
+
           <div class="product-card">
-            <div class="product-image"></div>
-            <p class="product-name">Item 1</p>
-            <p class="product-price">$0.50</p>
+            <div class="image-slider">
+              <img src="images/Bookmarks/panda_all.jpeg" class="slider-img active" />
+              <img src="images/Bookmarks/panda1.jpeg" class="slider-img" />
+              <img src="images/Bookmarks/panda2.jpeg" class="slider-img" />
+              <img src="images/Bookmarks/panda3.jpeg" class="slider-img" />
+              <img src="images/Bookmarks/panda4.jpeg" class="slider-img" />
+            </div>
+            <div class="slider-controls">
+              <button onclick="prevImage(this)">←</button>
+              <button onclick="nextImage(this)">→</button>
+            </div>
+            <h3 class="product-name">Panda Magnet Bookmark Set</h3>
+            <p class="product-price">$1.50</p>
           </div>
+
           <div class="product-card">
-            <div class="product-image"></div>
-            <p class="product-name">Item 2</p>
-            <p class="product-price">$1.00</p>
-          </div>
-          <div class="product-card">
-            <div class="product-image"></div>
-            <p class="product-name">Item 3</p>
+            <div class="image-slider">
+              <img src="images/ResinCabochons/sea_animals.jpeg" class="slider-img active" />
+              <img src="images/ResinCabochons/crab.jpeg" class="slider-img" />
+              <img src="images/ResinCabochons/conch.jpeg" class="slider-img" />
+              <img src="images/ResinCabochons/octopus.jpeg" class="slider-img" />
+              <img src="images/ResinCabochons/seahorse.jpeg" class="slider-img" />
+              <img src="images/ResinCabochons/seastar.jpeg" class="slider-img" />
+              <img src="images/ResinCabochons/shell.jpeg" class="slider-img" />
+            </div>
+            <div class="slider-controls">
+              <button onclick="prevImage(this)">←</button>
+              <button onclick="nextImage(this)">→</button>
+            </div>
+            <h3 class="product-name">Resin Cabochons</h3>
             <p class="product-price">$0.25</p>
           </div>
-          <div class="product-card">
-            <div class="product-image placeholder"></div>
-            <p class="product-name">Item 4</p>
-            <p class="product-price">$0.75</p>
-          </div>
+          
+         
         </div>
     </section>
   </main>
@@ -57,5 +73,7 @@
   <footer>
     <p class="copyright">© 2025 Tang Shop. Website built by Mom ❤️</p>
   </footer>
+
+  <script src="scripts.js"></script>
 </body>
 </html>
