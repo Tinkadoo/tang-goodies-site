@@ -1,38 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tang Shop</title>
-  <link rel="stylesheet" href="style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tang Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+      }
+      h1 {
+        font-family: 'Dancing Script', cursive;
+      }
+    </style>
+  </head>
+  <body class="bg-rose-100 text-gray-800 min-h-screen flex flex-col">
+    <header class="bg-rose-100 p-4 flex justify-between items-center flex-wrap">
+      <!-- Nav Tabs -->
+      <nav class="flex gap-5 text-lg ml-auto">
+        <a class="text-rose-500 font-semibold" href="#">Home</a>
+        <a href="about.html" class="hover:text-rose-500 font-semibold">About Us</a>
+        <a href="shop.html" class="hover:text-rose-500 font-semibold">Shop</a>
+        <a href="contact.html" class="hover:text-rose-500 font-semibold">Contact</a>
+      </nav>
+    </header>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+      <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-8">
+        <img src="images/Logos/logo.png" alt="Tang Shop Logo" class="h-40 w-auto" />
+        <div>
+          <h1 class="text-8xl font-bold">Tang Shop</h1>
+          <p class="text-lg mt-2">A kid business offering fun small items & goodie bags</p>
+        </div>
+      </div>
+    </main>
 
-	<div class="nav-tabs">
-		<a class="current-tab">Home</a>
-		<a href="about.html">About Us</a>
-		<a href="shop.html">Shop</a>
-		<a href="contact.html">Contact</a>
-	</div>
-
-	<div class="home-logo">
-		<img src="images/Logos/logo.png" alt="Tang Shop Logo" class="home-logo-img" />
-		<div class="home-logo-text">
-			<h1>Tang Shop</h1>
-			<p>A kid business offering fun small items & goodie bags</p>
-		</div>
-	</div>
-		
-	<div>
-    	<p class="copyright">© 2025 Tang Shop. Website built by Mom ❤️</p>
-  	</div>
-	
-  </header>
-
-</body>
+    <footer class="text-center text-sm text-gray-600 py-4 border-t border-rose-200">
+      © 2025 Tang Shop. Website built by Mom ❤️
+    </footer>
+  </body>
 </html>
