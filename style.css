@@ -1,210 +1,29 @@
-/* General Page Styling */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f1eb;
-    color: #333;
-    line-height: 1.6;
-}
-
-/* Header */
-header {
-  background-color: #ffdce1;
-  text-align: center;
-  position: relative;
-}
-  
-header h1 {
-  margin: 1.5rem 0 0;
-  font-size: 2.3rem;
-  color: #312d2d;
-  font-family: "Dancing Script", cursive;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.logo-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  height: auto; /* Full viewport height */
-  width: 100vw;  /* Full viewport width */
-  overflow: hidden;
-  flex-wrap: wrap;
-}
-
-.logo-header img {
-  width: auto; /* Adjust as needed */
-  height: 90px;
-  padding: 0.5rem 0.5rem;
-}
-
-/* Nav Tabs */
-.nav-tabs {
-  display: flex-end;
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  gap: 0.1rem;
-  flex-wrap: wrap;
-}
-
-.nav-tabs a {
-  color: #5b595a;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-weight: bold;
-  font-family: 'Segoe UI', sans-serif;
-  transition: background-color 0.3s;
-}
-
-.nav-tabs a:hover {
-  background-color: #fff0f3;
-}
-
-.nav-tabs a.current-tab{
-  /* background-color: #fff0f3; */
-  color: #d45c96;
-}
-
-/* Main Content */
-main {
-  padding: 2rem 1rem;
-  max-width: 1000px;
-  margin: auto;
-}
-
-/* Sections */
-section {
-  margin-bottom: 2.5rem;
-}
-
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #d45c96;
-}
-
-h3 {
-  font-size: 1.3rem;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  color: #444;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* -------------Landing page ------------- */
-
-.home-logo {
-  height: 90vh; /* Full viewport height */
-  width: 100vw;  /* Full viewport width */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.home-logo img.home-logo-img {
-  max-width: 20%;
-  max-height: auto;
-  object-fit: contain;
-  display: block;
-}
-
-.home-logo-text h1 {
-  margin: 0;
-  font-size: 6rem;
-  color: #312d2d;
-  font-family: "Dancing Script", cursive;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.home-logo-text p {
-  margin: 0.5rem 0 0;
-  font-size: 1.2rem;
-  color: #444;
-}
-
-.copyright {
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-  padding: 1rem 0rem;
-}
-
-/* --------------------- About Us page --------------------- */
-.about-container {
-  padding: 2rem 1.5rem;
-  max-width: 800px;
-  margin: auto;
-  background-color: #fff6f8;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-}
-
-.about-title {
-  text-align: center;
-  font-size: 2rem;
-  color: #d45c96;
-  margin-bottom: 1.5rem;
-}
-
-.about-card p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.about-thanks {
-  text-align: center;
-  font-weight: bold;
-  color: #d45c96;
-  font-size: 1.15rem;
-}
-
-/* ---------------------Contact Page----------------------- */
-
-.contact a {
-  color: #d45c96;
-  font-weight: bold;
-}
-
 /* ---------------------Shop page----------------------- */
-.product-list {
+/* .product-list {
   padding: 1rem;
   text-align: center;
-}
+} */
 
-.product-grid {
+/* .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 4 items per row */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 2rem;
   justify-content: center;
-}
+} */
 
 /* Medium screens (tablets) */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+} */
 
 /* Small screens (phones) */
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .product-grid {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 .product-card {
   background: #ffeef2;
@@ -228,36 +47,18 @@ img {
   object-fit: contain;  /* Changed from cover to contain */
   object-position: center;
   border-radius: 10px;
-  background-color: #ffeef2; /* Optional: provides clean padding background */
 }
 
 .slider-img.active {
   display: block;
 }
 
-.slider-controls {
-  margin-top: 1rem;
-}
-
 .slider-controls button {
-  background-color: #ffcce0;
-  border: none;
-  padding: 0.3rem 0.8rem;
+  background-color: #fde4e4;
+  border: 1rem;
+  padding: 0.1rem 0.5rem;
   margin: 0 0.3rem;
   border-radius: 6px;
-  font-size: 1rem;
   cursor: pointer;
-  color: #333;
-}
-
-.product-name {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
-}
-
-.product-price {
-  color: #d45c96;
-  font-size: 1rem;
 }
   
