@@ -1,29 +1,4 @@
 /* ---------------------Shop page----------------------- */
-/* .product-list {
-  padding: 1rem;
-  text-align: center;
-} */
-
-/* .product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 2rem;
-  justify-content: center;
-} */
-
-/* Medium screens (tablets) */
-/* @media (max-width: 1024px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-} */
-
-/* Small screens (phones) */
-/* @media (max-width: 600px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
-} */
 
 .product-card {
   background: #ffeef2;
