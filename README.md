@@ -1,6 +1,6 @@
-# 🎀 Tang Shop
+# 🎀 Tang Goodies
 
-**Tang Shop** is a kid business created by Zitang — a curious and creative young maker. While Tangtang focuses on designing fun products like custom pins, the website was proudly built by her mom to support and showcase her entrepreneurial journey.
+**Tang Goodies** is a kid business created by Zitang — a curious and creative young maker. While Tangtang focuses on designing fun products like custom pins, the website was proudly built by her mom to support and showcase her entrepreneurial journey.
 
 ---
 
