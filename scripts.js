@@ -22,3 +22,20 @@ function nextImage(button) {
     slider[prevIndex].classList.add('active');
   }
   
+  function addToCart(name, price, containerId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(item => item.name === name);
+  
+    if (existingItem) {
+      existingItem.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+  
+    localStorage.setItem('cart', JSON.stringify(cart));
+  
+    // Replace the button with "In Cart" text
+    const container = document.getElementById(containerId);
+    container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
+  }
+  
