@@ -25,11 +25,14 @@ function prevImage(button) {
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-  const cartCountElem = document.getElementById('cart-count');
-  if (cartCountElem) {
-    cartCountElem.textContent = count;
+
+  const badge = document.getElementById('cart-count-badge');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
   }
 }
+
   
 function addToCart(name, price, containerId) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];

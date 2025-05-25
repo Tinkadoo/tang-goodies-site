@@ -18,6 +18,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
       body {
         font-family: 'Segoe UI', sans-serif;
@@ -39,7 +41,17 @@
       <a href="about.html" class="hover:text-rose-500 font-semibold">About</a>
       <a href="shop.html" class="hover:text-rose-500 font-semibold">Shop</a>
       <a href="contact.html" class="text-rose-500 font-semibold">Contact</a>
-      <a href="cart.html" class="hover:text-rose-500 font-semibold">🛒 Cart</a>
+      <a href="cart.html" class="relative flex items-center space-x-1 text-black font-semibold">
+        <div class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="cart-count-badge"
+                class="absolute -top-3 -right-3 bg-orange-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white shadow">
+            0
+          </span>
+        </div>
+        <span class="ml-1 font-semibold text-xs hidden sm:inline">Cart</span>
+
+      </a>
     </nav>
   </header>
 
@@ -67,5 +79,15 @@
   <footer class="text-center text-sm text-gray-600 py-4">
     © 2025 Tang Goodies. Website built by Mom ❤️
   </footer>
+
+  <script src="scripts.js"></script>
+
+  <script>
+    // Ensure this runs after scripts.js is loaded and DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+      updateCartCount();
+    });
+  </script>
+  
 </body>
 </html>
