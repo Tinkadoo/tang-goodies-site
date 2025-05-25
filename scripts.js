@@ -54,3 +54,36 @@ function addToCart(name, price, containerId) {
   updateCartCount();
 }
   
+document.addEventListener('DOMContentLoaded', function () {
+  updateCartCount();
+
+  const form = document.getElementById('contact-form');
+  const sendBtn = document.getElementById('send-button');
+  const thankYouMsg = document.getElementById('thank-you-message');
+
+  if (form && sendBtn && thankYouMsg) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      fetch("https://formsubmit.co/tangshop.contact@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" }
+      })
+        .then(response => {
+          if (response.ok) {
+            sendBtn.classList.add("hidden");
+            thankYouMsg.classList.remove("hidden");
+            form.reset();
+          } else {
+            sendBtn.innerText = "Something went wrong. Try again.";
+          }
+        })
+        .catch(() => {
+          sendBtn.innerText = "Submission failed. Try again.";
+        });
+    });
+  }
+});

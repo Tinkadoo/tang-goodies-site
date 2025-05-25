@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-3TWD5GPRHL');
     </script>
 
@@ -29,65 +28,86 @@
       }
     </style>
   </head>
+
   <body class="bg-rose-100 text-gray-800 min-h-screen flex flex-col">
 
-  <header class="bg-rose-100 p-4 flex flex-wrap justify-between items-center gap-2">
-    <div class="flex items-center space-x-2">
-      <img src="images/Logos/logo.png" alt="Tang Goodies Logo" class="h-10 w-auto" />
-      <span class="text-3xl font-bold text-gray-800" style="font-family: 'Dancing Script', cursive;">Tang Goodies</span>
-    </div>
-    <nav class="flex gap-5 text-lg">
-      <a href="index.html" class="hover:text-rose-500 font-semibold">Home</a>
-      <a href="about.html" class="hover:text-rose-500 font-semibold">About</a>
-      <a href="shop.html" class="hover:text-rose-500 font-semibold">Shop</a>
-      <a href="contact.html" class="text-rose-500 font-semibold">Contact</a>
-      <a href="cart.html" class="relative flex items-center space-x-1 text-black font-semibold">
-        <div class="relative">
-          <i class="fas fa-shopping-cart text-xl"></i>
-          <span id="cart-count-badge"
-                class="absolute -top-3 -right-3 bg-orange-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white shadow">
-            0
-          </span>
-        </div>
-        <span class="ml-1 font-semibold text-xs hidden sm:inline">Cart</span>
-
-      </a>
-    </nav>
-  </header>
-
-  <!-- Line divider -->
-  <div class="h-[5px] bg-rose-300"></div>
-
-  <main class="flex-grow px-4 py-8 max-w-5xl mx-auto">
-    <section>
-      <h2 class="text-5xl text-pink-600 font-bold mb-12 text-center">📬 Get in Touch</h2>
-      <div class="p-6 space-y-4">
-        <p>Have a question or want to place an order?</p>
-        <p>
-          Email us at: 
-          <a href="mailto:tangshop.contact@gmail.com" class="text-pink-600 font-semibold hover:underline">
-            tangshop.contact@gmail.com
-          </a>
-        </p>
-        <p>We’ll try to respond within 24 hours. 💌</p>
+    <!-- Header -->
+    <header class="bg-rose-100 p-4 flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-2">
+        <img src="images/Logos/logo.png" alt="Tang Goodies Logo" class="h-10 w-auto" />
+        <span class="text-3xl font-bold text-gray-800" style="font-family: 'Dancing Script', cursive;">Tang Goodies</span>
       </div>
-    </section>
-  </main>
-  
+      <nav class="flex gap-5 text-lg">
+        <a href="index.html" class="hover:text-rose-500 font-semibold">Home</a>
+        <a href="about.html" class="hover:text-rose-500 font-semibold">About</a>
+        <a href="shop.html" class="hover:text-rose-500 font-semibold">Shop</a>
+        <a href="contact.html" class="text-rose-500 font-semibold">Contact</a>
+        <a href="cart.html" class="relative flex items-center space-x-1 text-black font-semibold">
+          <div class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-count-badge"
+                  class="absolute -top-3 -right-3 bg-orange-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white shadow">
+              0
+            </span>
+          </div>
+          <span class="ml-1 font-semibold text-xs hidden sm:inline">Cart</span>
+        </a>
+      </nav>
+    </header>
 
-  <!-- Footer -->
-  <footer class="text-center text-sm text-gray-600 py-4">
-    © 2025 Tang Goodies. Website built by Mom ❤️
-  </footer>
+    <!-- Divider -->
+    <div class="h-[5px] bg-rose-300"></div>
 
-  <script src="scripts.js"></script>
+    <!-- Main Contact Form Section -->
+    <main class="flex-grow px-4 py-8 max-w-2xl mx-auto">
+      <section>
+        <!-- <h2 class="text-5xl text-pink-600 font-bold mb-8 text-center">📬 Get in Touch</h2> -->
+        <p class="text-center mb-6">Have a question or want to place an order? Fill out the form below and we’ll get back to you soon 💌</p>
 
-  <script>
-    // Ensure this runs after scripts.js is loaded and DOM is ready
-    document.addEventListener('DOMContentLoaded', function () {
-      updateCartCount();
-    });
-  </script>
-  
-</body>
+        <form id="contact-form" class="bg-white p-6 rounded shadow space-y-4">
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+        
+          <div>
+            <label class="block font-semibold mb-1" for="name">Your Name</label>
+            <input class="w-full px-3 py-2 border rounded" type="text" id="name" name="name" required />
+          </div>
+        
+          <div>
+            <label class="block font-semibold mb-1" for="email">Your Email</label>
+            <input class="w-full px-3 py-2 border rounded" type="email" id="email" name="email" required />
+          </div>
+        
+          <div>
+            <label class="block font-semibold mb-1" for="message">Message</label>
+            <textarea class="w-full px-3 py-2 border rounded" id="message" name="message" rows="4" required></textarea>
+          </div>
+        
+          <button id="send-button"
+                  type="submit"
+                  class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded">
+            Send Message
+          </button>
+        
+          <p id="thank-you-message" class="text-green-700 font-medium hidden">
+            ✅ Thank you for your message. We’ll get back to you within 24 hours.
+          </p>
+        </form>
+        
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-600 py-4">
+      © 2025 Tang Goodies. Website built by Mom ❤️
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        updateCartCount();
+      });
+    </script>
+
+  </body>
 </html>
