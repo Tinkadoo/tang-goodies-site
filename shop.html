@@ -41,7 +41,11 @@
         <a href="about.html" class="hover:text-rose-500 font-semibold">About</a>
         <a href="shop.html" class="text-rose-500 font-semibold">Shop</a>
         <a href="contact.html" class="hover:text-rose-500 font-semibold">Contact</a>
-        <a href="cart.html" class="hover:text-rose-500 font-semibold">🛒 Cart</a>
+        <!-- <a href="cart.html" class="hover:text-rose-500 font-semibold">🛒 Cart</a> -->
+        <a href="cart.html" id="cart-link" class="relative">
+          🛒 Cart (<span id="cart-count">0</span>)
+        </a>
+        
       </nav>
     </header>
 
@@ -148,7 +152,14 @@
     <footer class="text-center text-sm text-gray-600 py-4">
       © 2025 Tang Goodies. Website built by Mom ❤️
     </footer>
-
+      
     <script src="scripts.js"></script>
+
+    <script>
+      // Ensure this runs after scripts.js is loaded and DOM is ready
+      document.addEventListener('DOMContentLoaded', function () {
+        updateCartCount();
+      });
+    </script>
   </body>
 </html>
