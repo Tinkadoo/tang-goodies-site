@@ -77,11 +77,12 @@
         cartItemsContainer.innerHTML = "";
 
         if (cartData.length === 0) {
-          emptyMessage.classList.remove("hidden");
-          checkoutBtn.disabled = true;
-          return;
+            emptyMessage.classList.remove("hidden");
+            checkoutBtn.disabled = true;
+            subtotalEl.textContent = "$0.00";
+            return;
         } else {
-          emptyMessage.classList.add("hidden");
+            emptyMessage.classList.add("hidden");
         }
 
         cartData.forEach(item => {
