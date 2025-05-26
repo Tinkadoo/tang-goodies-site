@@ -34,25 +34,23 @@ function updateCartCount() {
 }
 
   
-function addToCart(name, price, containerId) {
+function addToCart(name, price, imageUrl, containerId) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   const existingItem = cart.find(item => item.name === name);
 
   if (existingItem) {
     existingItem.qty += 1;
   } else {
-    cart.push({ name, price, qty: 1 });
+    cart.push({ name, price, qty: 1, image: imageUrl });
   }
 
   localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
 
-  // Replace the button with "In Cart" text
   const container = document.getElementById(containerId);
   container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
-
-  // Update shopping cart
-  updateCartCount();
 }
+
   
 document.addEventListener('DOMContentLoaded', function () {
   updateCartCount();
