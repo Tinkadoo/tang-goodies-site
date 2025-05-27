@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const formData = new FormData(form);
 
-      fetch("https://formsubmit.co/tangshop.contact@gmail.com", {
+      fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243sub", {
         method: "POST",
         body: formData,
         headers: { Accept: "application/json" }
