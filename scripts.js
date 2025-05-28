@@ -1,3 +1,13 @@
+const STORAGE_KEY = "cart";
+let cartData = loadCart();
+
+const cartItemsContainer = document.getElementById("cart-items");
+const subtotalEl = document.getElementById("subtotal");
+const zipInput = document.getElementById("zip");
+const zipWarning = document.getElementById("zip-warning");
+const checkoutBtn = document.getElementById("checkout-btn");
+const emptyMessage = document.getElementById("empty-message");
+
 function nextImage(button) {
     const slider = button.closest('.product-card').querySelectorAll('.slider-img');
     let currentIndex = Array.from(slider).findIndex(img => img.classList.contains('active'));
@@ -51,10 +61,101 @@ function addToCart(name, price, imageUrl, containerId) {
   container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
 }
 
+
+function loadCart() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+      
+function saveCart() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartData));
+}
   
-document.addEventListener('DOMContentLoaded', function () {
+      
+function renderCart() {
+  cartItemsContainer.innerHTML = "";
+
+  if (cartData.length === 0) {
+    emptyMessage.classList.remove("hidden");
+    checkoutBtn.disabled = true;
+    subtotalEl.textContent = "$0.00";
+    return;
+  } else {
+    emptyMessage.classList.add("hidden");
+  }
+
+  cartData.forEach((item, index) => {
+    const itemEl = document.createElement("div");
+    itemEl.className = "flex items-center justify-between border-b pb-2";
+
+    const imageUrl = item.image || "https://cdn-icons-png.flaticon.com/512/2917/2917990.png";
+
+    itemEl.innerHTML = `
+      <div class="flex items-center space-x-4">
+        <img src="${imageUrl}" alt="${item.name}" class="w-14 h-14 object-cover rounded">
+        <div>
+          <p class="font-semibold">${item.name}</p>
+          <p class="text-sm text-gray-500">$${item.price.toFixed(2)} each</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="updateQuantity(${index}, -1)" class="px-2 bg-gray-200 rounded">−</button>
+        <input type="number" value="${item.qty}" min="1" class="w-12 text-center border rounded" onchange="setQuantity(${index}, this.value)">
+        <button onclick="updateQuantity(${index}, 1)" class="px-2 bg-gray-200 rounded">+</button>
+        <button onclick="removeItem(${index})" class="ml-3 text-red-600">🗑️</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(itemEl);
+  });
+
+  updateSubtotal();
+}
+      
+function updateSubtotal() {
+  const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
+  subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+  validateCheckout();
+}
+      
+function updateQuantity(index, change) {
+    if (!cartData[index]) return;
+    cartData[index].qty = Math.max(1, cartData[index].qty + change);
+    saveCart();
+    renderCart();
+    updateCartCount();
+}
+      
+function setQuantity(index, value) {
+    if (!cartData[index]) return;
+    cartData[index].qty = Math.max(1, parseInt(value) || 1);
+    saveCart();
+    renderCart();
+    updateCartCount();
+}
+      
+function removeItem(index) {
+    cartData.splice(index, 1);
+    saveCart();
+    renderCart();
+    updateCartCount();
+}
+      
+function validateCheckout() {
+  const zip = zipInput.value.trim();
+  if (zip !== "77494") {
+    zipWarning.classList.remove("hidden");
+    checkoutBtn.disabled = true;
+  } else {
+    zipWarning.classList.add("hidden");
+    checkoutBtn.disabled = cartData.length === 0;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Always update cart count badge
   updateCartCount();
 
+  // Contact form handling (if present)
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
@@ -83,5 +184,11 @@ document.addEventListener('DOMContentLoaded', function () {
           sendBtn.innerText = "Submission failed. Try again.";
         });
     });
+  }
+
+  // Cart page logic (only if cart elements are present)
+  if (zipInput && cartItemsContainer) {
+    zipInput.addEventListener("input", validateCheckout);
+    renderCart();
   }
 });
