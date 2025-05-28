@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3TWD5GPRHL"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+    
+          gtag('config', 'G-3TWD5GPRHL');
+        </script>
+    
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cart | Tang Goodies</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        
+    </head>
+    <body class="bg-rose-100 text-gray-800 min-h-screen flex flex-col">
+
+        <header class="bg-rose-100 p-4 flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-2 min-w-[150px]">
+            <img src="images/Logos/logo.png" alt="Tang Goodies Logo" class="h-10 w-auto" />
+            <span class="text-3xl font-bold text-gray-800" style="font-family: 'Dancing Script', cursive;">Tang Goodies</span>
+            </div>
+            <nav class="flex flex-wrap justify-center gap-5 text-lg mt-2 sm:mt-0">
+            <a href="index.html" class="hover:text-rose-500 font-semibold">Home</a>
+            <a href="about.html" class="hover:text-rose-500 font-semibold">About</a>
+            <a href="shop.html" class="hover:text-rose-500 font-semibold">Shop</a>
+            <a href="contact.html" class="hover:text-rose-500 font-semibold">Contact</a>
+            <a href="cart.html" class="relative flex items-center space-x-1 text-black font-semibold">
+                <div class="relative">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="cart-count-badge"
+                        class="absolute -top-3 -right-3 bg-orange-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white shadow">
+                    0
+                </span>
+                </div>
+                <span class="ml-1 font-semibold text-xs hidden sm:inline">Cart</span>
+    
+            </a>
+            </nav>
+        </header>
+    
+        <!-- Line divider -->
+        <div class="h-[5px] bg-rose-300"></div>
+
+        <!-- Main Content -->
+        <main class="text-gray-800 min-h-screen flex flex-col px-4 py-8">
+            <div class="w-full sm:w-2/3 max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
+                <h1 class="text-3xl font-bold mb-4 text-left">Checkout</h1>
+                <hr class="border-t border-gray-300 mb-6">
+
+                <form id="checkout-form" method="POST" action="https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243">
+                    <input type="hidden" name="_subject" value="New Order from Tang Goodies">
+                    <input type="hidden" name="_template" value="box">
+                    <input type="hidden" name="Order" id="order-details">
+        
+                    <label class="block font-semibold mb-1">Name:</label>
+                    <input name="Name" required class="border p-2 rounded w-full mb-4">
+        
+                    <label class="block font-semibold mb-1">Phone:</label>
+                    <input name="Phone" required class="border p-2 rounded w-full mb-4">
+        
+                    <label class="block font-semibold mb-1">Delivery Address:</label>
+                    <input name="Address" required class="border p-2 rounded w-full mb-4">
+        
+                    <label class="block font-semibold mb-1">Notes (optional):</label>
+                    <textarea name="Notes" class="border p-2 rounded w-full mb-4"></textarea>
+        
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">Place Order</button>
+                </form>
+
+                <div id="order-confirmation" class="hidden text-green-700 mt-4 font-semibold">
+                    🎉 Thank you! Your order has been submitted.
+                </div>
+            </div>
+        </main>
+
+    <!-- <script>
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const orderDetails = document.getElementById("order-details");
+        const confirmation = document.getElementById("order-confirmation");
+        const form = document.getElementById("checkout-form");
+
+        if (cart.length === 0) {
+        window.location.href = "cart.html";
+        }
+
+        const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
+        orderDetails.value = summary;
+
+        form.addEventListener("submit", () => {
+        setTimeout(() => {
+            localStorage.removeItem("cart");
+            confirmation.classList.remove("hidden");
+            form.classList.add("hidden");
+        }, 500);
+        });
+    </script> -->
+    </body>
+</html>

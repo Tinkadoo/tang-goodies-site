@@ -142,14 +142,17 @@ function removeItem(index) {
       
 function validateCheckout() {
   const zip = zipInput.value.trim();
-  if (zip !== "77494") {
+  const checkoutBtn = document.getElementById("checkout-btn");
+
+  if (zip !== "77494" || cartData.length === 0) {
     zipWarning.classList.remove("hidden");
-    checkoutBtn.disabled = true;
+    checkoutBtn.classList.add("opacity-50", "pointer-events-none");
   } else {
     zipWarning.classList.add("hidden");
-    checkoutBtn.disabled = cartData.length === 0;
+    checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   // Always update cart count badge
