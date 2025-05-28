@@ -13,7 +13,7 @@
     
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Cart | Tang Goodies</title>
+        <title>Checkout | Tang Goodies</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,26 +82,7 @@
             </div>
         </main>
 
-    <!-- <script>
-        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        const orderDetails = document.getElementById("order-details");
-        const confirmation = document.getElementById("order-confirmation");
-        const form = document.getElementById("checkout-form");
+    <script src="scripts.js"></script>
 
-        if (cart.length === 0) {
-        window.location.href = "cart.html";
-        }
-
-        const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
-        orderDetails.value = summary;
-
-        form.addEventListener("submit", () => {
-        setTimeout(() => {
-            localStorage.removeItem("cart");
-            confirmation.classList.remove("hidden");
-            form.classList.add("hidden");
-        }, 500);
-        });
-    </script> -->
     </body>
 </html>

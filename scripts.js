@@ -155,10 +155,9 @@ function validateCheckout() {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Always update cart count badge
+  // Existing logic for cart and contact page
   updateCartCount();
 
-  // Contact form handling (if present)
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
@@ -189,9 +188,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Cart page logic (only if cart elements are present)
   if (zipInput && cartItemsContainer) {
     zipInput.addEventListener("input", validateCheckout);
     renderCart();
   }
+
+  // ✅ New: Checkout page logic
+  const checkoutForm = document.getElementById("checkout-form");
+  const orderDetails = document.getElementById("order-details");
+  const confirmation = document.getElementById("order-confirmation");
+
+  if (checkoutForm && orderDetails && confirmation) {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (cart.length === 0) {
+      window.location.href = "cart.html";
+    }
+
+    const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
+    orderDetails.value = summary;
+
+    checkoutForm.addEventListener("submit", () => {
+      setTimeout(() => {
+        localStorage.removeItem("cart");
+        confirmation.classList.remove("hidden");
+        checkoutForm.classList.add("hidden");
+        updateCartCount();
+      }, 500);
+    });
+  }
 });
+
