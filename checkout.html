@@ -52,29 +52,66 @@
 
         <!-- Main Content -->
         <main class="text-gray-800 min-h-screen flex flex-col px-4 py-8">
-            <div class="w-full sm:w-2/3 max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
+            <div class="w-full sm:w-1/2 max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
                 <h1 class="text-3xl font-bold mb-4 text-left">Checkout</h1>
                 <hr class="border-t border-gray-300 mb-6">
 
-                <form id="checkout-form" method="POST" action="https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243">
+                <form 
+                    id="checkout-form" 
+                    method="POST" 
+                    action="https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243">
+
                     <input type="hidden" name="_subject" value="New Order from Tang Goodies">
                     <input type="hidden" name="_template" value="box">
                     <input type="hidden" name="_template" value="table">
                     <input type="hidden" name="Order" id="order-details">
                     
-                    <label class="block font-semibold mb-1">Name:</label>
-                    <input name="Name" required class="border p-2 rounded w-full mb-4">
-        
-                    <label class="block font-semibold mb-1">Phone:</label>
-                    <input name="Phone" required class="border p-2 rounded w-full mb-4">
-        
-                    <label class="block font-semibold mb-1">Delivery Address:</label>
-                    <input name="Address" required class="border p-2 rounded w-full mb-4">
-        
+                    <div class="mb-4 grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">Name:</label>
+                            <input name="Name" required class="border p-2 rounded w-full mb-4">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Phone:</label>
+                            <input name="Phone" required class="border p-2 rounded w-full mb-4">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold mb-1">Email:</label>
+                        <input name="Email" type="email" required class="border p-2 rounded w-full mb-4">
+                    </div>
+                            
+                    <!-- Street Address -->
+                    <div class="mb-4">
+                        <label class="block font-semibold mb-1">Street Address:</label>
+                        <input name="Street Address" required class="border p-2 rounded w-full">
+                    </div>                   
+  
+                    <!-- City, State and ZIP --> 
+                    <div class="mb-4 grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">City:</label>
+                            <input name="City" required class="border p-2 rounded w-full">
+                        </div>
+                        <div>
+                        <label class="block font-semibold mb-1">State:</label>
+                        <input name="State" required class="border p-2 rounded w-full uppercase">
+                        </div>
+                        <div>
+                        <label class="block font-semibold mb-1">ZIP Code:</label>
+                        <input id="zip-checkout" name="ZIP Code" required maxlength="5" class="border p-2 rounded w-full">
+                        <p id="zip-warning-checkout" class="text-red-500 text-sm hidden mt-1">We currently only deliver to ZIP code 77494.</p>
+                        </div>
+                    </div>
+  
                     <label class="block font-semibold mb-1">Notes (optional):</label>
                     <textarea name="Notes" class="border p-2 rounded w-full mb-4"></textarea>
         
-                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">Place Order</button>
+                    <button id="place-order-btn" type="submit" disabled class="bg-green-600 text-white px-4 py-2 rounded w-full opacity-50 cursor-not-allowed">
+                        Place Order
+                    </button>
+                      
                 </form>
 
                 <div id="order-confirmation" class="hidden text-green-700 mt-4 font-semibold">

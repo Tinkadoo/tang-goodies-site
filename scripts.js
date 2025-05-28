@@ -3,10 +3,14 @@ let cartData = loadCart();
 
 const cartItemsContainer = document.getElementById("cart-items");
 const subtotalEl = document.getElementById("subtotal");
-const zipInput = document.getElementById("zip");
-const zipWarning = document.getElementById("zip-warning");
+const zipInputCart = document.getElementById("zip-cart");
+const zipWarningCart = document.getElementById("zip-warning-cart");
 const checkoutBtn = document.getElementById("checkout-btn");
 const emptyMessage = document.getElementById("empty-message");
+
+const zipInputCheckout = document.getElementById("zip-checkout");
+const zipWarningCheckout = document.getElementById("zip-warning-checkout");
+const placeOrderBtn = document.getElementById("place-order-btn");
 
 function nextImage(button) {
     const slider = button.closest('.product-card').querySelectorAll('.slider-img');
@@ -141,14 +145,14 @@ function removeItem(index) {
 }
       
 function validateCheckout() {
-  const zip = zipInput.value.trim();
+  const zip = zipInputCart.value.trim();
   const checkoutBtn = document.getElementById("checkout-btn");
 
   if (zip !== "77494" || cartData.length === 0) {
-    zipWarning.classList.remove("hidden");
+    zipWarningCart.classList.remove("hidden");
     checkoutBtn.classList.add("opacity-50", "pointer-events-none");
   } else {
-    zipWarning.classList.add("hidden");
+    zipWarningCart.classList.add("hidden");
     checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
   }
 }
@@ -188,9 +192,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (zipInput && cartItemsContainer) {
-    zipInput.addEventListener("input", validateCheckout);
+  if (zipInputCart && cartItemsContainer) {
+    zipInputCart.addEventListener("input", validateCheckout);
     renderCart();
+  }
+
+  if (zipInputCheckout && placeOrderBtn) {
+    zipInputCheckout.addEventListener("input", () => {
+      const zip = zipInputCheckout.value.trim();
+      const isValid = zip === "77494";
+
+      placeOrderBtn.disabled = !isValid;
+      placeOrderBtn.classList.toggle("opacity-50", !isValid);
+      placeOrderBtn.classList.toggle("cursor-not-allowed", !isValid);
+      zipWarningCheckout.classList.toggle("hidden", isValid);
+    });
   }
 
   // ✅ New: Checkout page logic
