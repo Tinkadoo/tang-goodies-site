@@ -96,24 +96,22 @@
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">State:</label>
-                            <select name="State" required class="border p-2 rounded w-full">
-                                <option value="TX" selected>Texas</option>
-                            </select>
+                            <input name="State" value="TX" readonly class="border p-2 rounded w-full bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                         <label class="block font-semibold mb-1">ZIP Code:</label>
-                        <input id="zip-checkout" name="ZIP Code" required maxlength="5" class="border p-2 rounded w-full">
-                        <p id="zip-warning-checkout" class="text-red-500 text-sm hidden mt-1">We currently only deliver to ZIP code 77494.</p>
+                        <input id="zip-checkout" name="ZIP Code" value="77494" readonly class="border p-2 rounded w-full bg-gray-100 cursor-not-allowed">
                         </div>
                     </div>
+                    <p class="text-red-500 text-sm mt-1 mb-2">We currently only deliver to ZIP code 77494.</p>
   
                     <label class="block font-semibold mb-1">Notes (optional):</label>
                     <textarea name="Notes" class="border p-2 rounded w-full mb-4"></textarea>
         
-                    <button id="place-order-btn" type="submit" disabled class="bg-green-600 text-white px-4 py-2 rounded w-full opacity-50 cursor-not-allowed">
+                    <button id="place-order-btn" type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">
                         Place Order
                     </button>
-                      
+                          
                 </form>
 
                 <div id="order-confirmation" class="hidden text-green-700 mt-4 font-semibold">

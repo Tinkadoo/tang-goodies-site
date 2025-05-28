@@ -7,9 +7,6 @@ const zipInputCart = document.getElementById("zip-cart");
 const zipWarningCart = document.getElementById("zip-warning-cart");
 const checkoutBtn = document.getElementById("checkout-btn");
 const emptyMessage = document.getElementById("empty-message");
-
-const zipInputCheckout = document.getElementById("zip-checkout");
-const zipWarningCheckout = document.getElementById("zip-warning-checkout");
 const placeOrderBtn = document.getElementById("place-order-btn");
 
 function nextImage(button) {
@@ -195,18 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (zipInputCart && cartItemsContainer) {
     zipInputCart.addEventListener("input", validateCheckout);
     renderCart();
-  }
-
-  if (zipInputCheckout && placeOrderBtn) {
-    zipInputCheckout.addEventListener("input", () => {
-      const zip = zipInputCheckout.value.trim();
-      const isValid = zip === "77494";
-
-      placeOrderBtn.disabled = !isValid;
-      placeOrderBtn.classList.toggle("opacity-50", !isValid);
-      placeOrderBtn.classList.toggle("cursor-not-allowed", !isValid);
-      zipWarningCheckout.classList.toggle("hidden", isValid);
-    });
   }
 
   // ✅ New: Checkout page logic
