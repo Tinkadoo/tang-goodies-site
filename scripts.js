@@ -216,5 +216,38 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 500);
     });
   }
+
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      // Dynamically calculate total from cart
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
+  
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: total
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
+        
+        // ✅ Clear cart, show confirmation, etc.
+        localStorage.removeItem("cart");
+        updateCartCount();
+  
+        const confirmation = document.getElementById("order-confirmation");
+        const checkoutForm = document.getElementById("checkout-form");
+        if (confirmation && checkoutForm) {
+          confirmation.classList.remove("hidden");
+          checkoutForm.classList.add("hidden");
+        }
+      });
+    }
+  }).render('#paypal-button-container');
+  
 });
 
