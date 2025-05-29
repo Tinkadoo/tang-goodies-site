@@ -27,7 +27,7 @@ It’s meant to grow alongside Zitang ideas and products.
 ## 🧰 Project Structure
 tang-shop-site/   
 ├── index.html # Main webpage   
-├── style.css # Styling   
+├── styles/ # Styling   
 └── images/ # Sample or product images
 
 ---
