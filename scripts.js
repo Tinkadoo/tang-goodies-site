@@ -110,12 +110,32 @@ function renderCart() {
   updateSubtotal();
 }
       
+// function updateSubtotal() {
+//   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
+//   subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+//   // validateCheckout();
+//   updateCheckoutState();
+// }
+
 function updateSubtotal() {
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
-  subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-  // validateCheckout();
+  const taxRate = 0.0825;
+  const paypalPercent = 0.0299;
+  const paypalFixed = 0.49;
+
+  const taxAmount = subtotal * taxRate;
+  const processingFee = subtotal > 0 ? (subtotal * paypalPercent + paypalFixed) : 0;
+  const total = subtotal + taxAmount + processingFee;
+
+  // Update UI
+  document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
+  document.getElementById("tax").textContent = `$${taxAmount.toFixed(2)}`;
+  document.getElementById("paypal-fee").textContent = `$${processingFee.toFixed(2)}`;
+  document.getElementById("total").textContent = `$${total.toFixed(2)}`;
+
   updateCheckoutState();
 }
+
       
 function updateQuantity(index, change) {
     if (!cartData[index]) return;
