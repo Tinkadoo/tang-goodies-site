@@ -28,6 +28,7 @@ It’s meant to grow alongside Zitang ideas and products.
 tang-shop-site/   
 ├── index.html # Main webpage   
 ├── styles/ # Styling   
+├── pages/  # web pages
 └── images/ # Sample or product images
 
 ---

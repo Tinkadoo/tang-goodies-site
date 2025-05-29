@@ -14,7 +14,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shop | Tang Goodies</title>
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="../styles/style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
     <!-- Header -->
     <header class="bg-rose-100 p-4 flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center space-x-2">
-        <img src="images/Logos/logo.png" alt="Tang Goodies Logo" class="h-10 w-auto" />
+        <img src="../images/Logos/logo.png" alt="Tang Goodies Logo" class="h-10 w-auto" />
         <span class="text-3xl font-bold text-gray-800" style="font-family: 'Dancing Script', cursive;">Tang Goodies</span>
       </div>
       <nav class="flex gap-5 text-lg">
@@ -59,11 +59,11 @@
 
         <div class="product-card bg-white rounded-lg p-4 shadow-md">
           <div class="image-slider relative">
-            <img src="images/Bookmarks/panda_all.jpeg" class="slider-img active rounded-md" />
-            <img src="images/Bookmarks/panda1.jpeg" class="slider-img rounded-md" />
-            <img src="images/Bookmarks/panda2.jpeg" class="slider-img rounded-md" />
-            <img src="images/Bookmarks/panda3.jpeg" class="slider-img rounded-md" />
-            <img src="images/Bookmarks/panda4.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Bookmarks/panda_all.jpeg" class="slider-img active rounded-md" />
+            <img src="../images/Bookmarks/panda1.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Bookmarks/panda2.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Bookmarks/panda3.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Bookmarks/panda4.jpeg" class="slider-img rounded-md" />
           </div>
           <div class="slider-controls flex justify-center gap-x-8 mt-2 mb-2">
             <button onclick="prevImage(this)" class="text-2xl">←</button>
@@ -74,7 +74,7 @@
             <p class="text-pink-600 font-bold">$1.50</p>
             <div id="panda-bookmark-btn">
               <button 
-                onclick="addToCart('Panda Magnet Bookmark Set', 1.5, 'images/Bookmarks/panda_all.jpeg', 'panda-bookmark-btn')"
+                onclick="addToCart('Panda Magnet Bookmark Set', 1.5, '../images/Bookmarks/panda_all.jpeg', 'panda-bookmark-btn')"
                 class="bg-yellow-300 hover:bg-yellow-500 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm">
                 Add to Cart
               </button>
@@ -84,13 +84,13 @@
 
         <div class="product-card bg-white rounded-lg p-4 shadow-md">
           <div class="image-slider relative">
-            <img src="images/ResinCabochons/sea_animals.jpeg" class="slider-img active rounded-md" />
-            <img src="images/ResinCabochons/conch.jpeg" class="slider-img rounded-md" />
-            <img src="images/ResinCabochons/crab.jpeg" class="slider-img rounded-md" />
-            <img src="images/ResinCabochons/octopus.jpeg" class="slider-img rounded-md" />
-            <img src="images/ResinCabochons/seahorse.jpeg" class="slider-img rounded-md" />
-            <img src="images/ResinCabochons/seastar.jpeg" class="slider-img rounded-md" />
-            <img src="images/ResinCabochons/shell.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/sea_animals.jpeg" class="slider-img active rounded-md" />
+            <img src="../images/ResinCabochons/conch.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/crab.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/octopus.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/seahorse.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/seastar.jpeg" class="slider-img rounded-md" />
+            <img src="../images/ResinCabochons/shell.jpeg" class="slider-img rounded-md" />
           </div>
           <div class="slider-controls flex justify-center gap-x-8 mt-2 mb-2">
             <button onclick="prevImage(this)" class="text-2xl">←</button>
@@ -101,7 +101,7 @@
             <p class="text-pink-600 font-bold">$0.25</p>
             <div id="resin-cabochons-btn">
               <button 
-                onclick="addToCart('Resin Cabochons', 0.25, 'images/ResinCabochons/sea_animals.jpeg', 'resin-cabochons-btn')"
+                onclick="addToCart('Resin Cabochons', 0.25, '../images/ResinCabochons/sea_animals.jpeg', 'resin-cabochons-btn')"
                 class="bg-yellow-300 hover:bg-yellow-500 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm">
                 Add to Cart
               </button>
@@ -111,18 +111,18 @@
 
         <div class="product-card bg-white rounded-lg p-4 shadow-md">
           <div class="image-slider relative">
-            <img src="images/Keychain/panda_all.jpeg" class="slider-img active rounded-md" />
-            <img src="images/Keychain/panda1.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda2.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda3.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda4.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda5.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda6.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda7.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda8.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda9.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda10.jpeg" class="slider-img rounded-md" />
-            <img src="images/Keychain/panda11.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda_all.jpeg" class="slider-img active rounded-md" />
+            <img src="../images/Keychain/panda1.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda2.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda3.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda4.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda5.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda6.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda7.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda8.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda9.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda10.jpeg" class="slider-img rounded-md" />
+            <img src="../images/Keychain/panda11.jpeg" class="slider-img rounded-md" />
           </div>
           <div class="slider-controls flex justify-center gap-x-8 mt-2 mb-2">
             <button onclick="prevImage(this)" class="text-2xl">←</button>
@@ -133,7 +133,7 @@
             <p class="text-pink-600 font-bold">$1.50</p>
             <div id="panda-phone-keychain-charms-btn">
               <button 
-                onclick="addToCart('Panda Phone/Keychain Charms', 1.5, 'images/Keychain/panda_all.jpeg', 'panda-phone-keychain-charms-btn')"
+                onclick="addToCart('Panda Phone/Keychain Charms', 1.5, '../images/Keychain/panda_all.jpeg', 'panda-phone-keychain-charms-btn')"
                 class="bg-yellow-300 hover:bg-yellow-500 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm">
                 Add to Cart
               </button>
@@ -149,7 +149,7 @@
       © 2025 Tang Goodies. Website built by Mom ❤️
     </footer>
       
-    <script src="scripts/scripts.js"></script>
+    <script src="../scripts/scripts.js"></script>
 
   </body>
 </html>
