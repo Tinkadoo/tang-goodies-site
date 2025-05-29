@@ -3,8 +3,6 @@ let cartData = loadCart();
 
 const cartItemsContainer = document.getElementById("cart-items");
 const subtotalEl = document.getElementById("subtotal");
-const zipInputCart = document.getElementById("zip-cart");
-const zipWarningCart = document.getElementById("zip-warning-cart");
 const checkoutBtn = document.getElementById("checkout-btn");
 const emptyMessage = document.getElementById("empty-message");
 const placeOrderBtn = document.getElementById("place-order-btn");
@@ -115,7 +113,8 @@ function renderCart() {
 function updateSubtotal() {
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
   subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-  validateCheckout();
+  // validateCheckout();
+  updateCheckoutState();
 }
       
 function updateQuantity(index, change) {
@@ -140,19 +139,18 @@ function removeItem(index) {
     renderCart();
     updateCartCount();
 }
-      
-function validateCheckout() {
-  const zip = zipInputCart.value.trim();
-  const checkoutBtn = document.getElementById("checkout-btn");
 
-  if (zip !== "77494" || cartData.length === 0) {
-    zipWarningCart.classList.remove("hidden");
-    checkoutBtn.classList.add("opacity-50", "pointer-events-none");
-  } else {
-    zipWarningCart.classList.add("hidden");
-    checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
+
+function updateCheckoutState() {
+  if (checkoutBtn) {
+    if (cartData.length === 0) {
+      checkoutBtn.classList.add("opacity-50", "pointer-events-none");
+    } else {
+      checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
+    }
   }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -189,10 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (zipInputCart && cartItemsContainer) {
-    zipInputCart.addEventListener("input", validateCheckout);
+  if (cartItemsContainer) {
     renderCart();
   }
+  
 
   // ✅ New: Checkout page logic
   const checkoutForm = document.getElementById("checkout-form");
