@@ -171,11 +171,34 @@ function updateCheckoutState() {
   }
 }
 
+const supabase = window.supabase.createClient(
+  'https://zfkbcmrvbmsikabwpjrh.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpma2JjbXJ2Ym1zaWthYndwanJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MTY2MTAsImV4cCI6MjA2NDA5MjYxMH0.kQ6g8Ief2IRDzWMsatT2KtxfROHDT1HvGll7mMNsSg8'
+);
+
+async function loadInventory() {
+  const { data, error } = await supabase.from("inventory").select("*");
+
+  if (error) {
+    console.error("❌ Error loading inventory:", error.message);
+    return;
+  }
+
+  console.log("✅ Supabase data received:", data);
+  
+  // 🔍 Log stock values
+  data.forEach(item => {
+    console.log(`Item: ${item.name}, Stock: ${item.stock}`);
+  });
+}
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Existing logic for cart and contact page
+
   updateCartCount();
+  console.log("✅ DOM loaded, calling loadInventory()");
+  loadInventory();
 
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
@@ -237,37 +260,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      // Dynamically calculate total from cart
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
+  // paypal.Buttons({
+  //   createOrder: function(data, actions) {
+  //     // Dynamically calculate total from cart
+  //     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  //     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
   
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            value: total
-          }
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
+  //     return actions.order.create({
+  //       purchase_units: [{
+  //         amount: {
+  //           value: total
+  //         }
+  //       }]
+  //     });
+  //   },
+  //   onApprove: function(data, actions) {
+  //     return actions.order.capture().then(function(details) {
+  //       alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
         
-        // ✅ Clear cart, show confirmation, etc.
-        localStorage.removeItem("cart");
-        updateCartCount();
+  //       // ✅ Clear cart, show confirmation, etc.
+  //       localStorage.removeItem("cart");
+  //       updateCartCount();
   
-        const confirmation = document.getElementById("order-confirmation");
-        const checkoutForm = document.getElementById("checkout-form");
-        if (confirmation && checkoutForm) {
-          confirmation.classList.remove("hidden");
-          checkoutForm.classList.add("hidden");
-        }
-      });
-    }
-  }).render('#paypal-button-container');
+  //       const confirmation = document.getElementById("order-confirmation");
+  //       const checkoutForm = document.getElementById("checkout-form");
+  //       if (confirmation && checkoutForm) {
+  //         confirmation.classList.remove("hidden");
+  //         checkoutForm.classList.add("hidden");
+  //       }
+  //     });
+  //   }
+  // }).render('#paypal-button-container');
   
 });
 
