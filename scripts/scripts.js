@@ -32,7 +32,6 @@ function prevImage(button) {
 }
 
 function updateCartCount() {
-  console.log("🛒 updateCartCount called on", window.location.pathname);
 
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
@@ -173,6 +172,10 @@ const supabase = window.supabase.createClient(
 );
 
 async function loadInventory() {
+
+  const container = document.getElementById("product-list");
+  if (!container) return; // Skip on pages other than shop.html
+
   const { data, error } = await supabase.from("inventory").select("*");
 
   if (error) {
@@ -180,7 +183,6 @@ async function loadInventory() {
     return;
   }
 
-  const container = document.getElementById("product-list");
   container.innerHTML = "";
 
   // 🔍 Log items values
