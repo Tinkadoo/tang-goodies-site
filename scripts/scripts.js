@@ -32,6 +32,8 @@ function prevImage(button) {
 }
 
 function updateCartCount() {
+  console.log("🛒 updateCartCount called on", window.location.pathname);
+
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
 
@@ -109,13 +111,7 @@ function renderCart() {
 
   updateSubtotal();
 }
-      
-// function updateSubtotal() {
-//   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
-//   subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-//   // validateCheckout();
-//   updateCheckoutState();
-// }
+
 
 function updateSubtotal() {
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -238,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateCartCount();
   loadInventory();
-
+ 
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
