@@ -214,7 +214,14 @@ async function loadInventory() {
       </div>
       <div class="text-center">
         <h3 class="text-ml mt-3">${item.name}</h3>
-        <p class="text-pink-600 font-bold">$${item.price.toFixed(2)}</p>
+        <div class="mt-1 mb-1">
+
+          <p class="text-pink-600 font-bold text-lg">$${item.price.toFixed(2)}</p>
+          <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium mt-1">
+            In Stock: ${item.stock}
+          </span>
+
+        </div>
         <div id="${safeName}-btn">
           <button
             onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn')"
