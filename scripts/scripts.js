@@ -184,20 +184,55 @@ async function loadInventory() {
     return;
   }
 
-  console.log("✅ Supabase data received:", data);
-  
-  // 🔍 Log stock values
+  const container = document.getElementById("product-list");
+  container.innerHTML = "";
+
+  // 🔍 Log items values
   data.forEach(item => {
-    console.log(`Item: ${item.name}, Stock: ${item.stock}`);
+    // console.log(`item_id: ${item.id}, item_name: ${item.name}, item_price: ${item.price}, item_stock: ${item.stock}, item_image_path: ${item.image_path}`);
+
+    const safeName = item.name.replace(/\s+/g, '-').toLowerCase();
+    const imageFolder = item.image_path;
+    const imageList = item.image_list || [];
+
+    // Build dynamic image slider HTML
+    const imageSlides = imageList.map((filename, index) => {
+      const activeClass = index === 0 ? 'active' : '';
+      return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} rounded-md" />`;
+    }).join('');
+
+    const card = document.createElement("div");
+    card.className = "product-card bg-white rounded-lg p-4 shadow-md";
+
+    card.innerHTML = `
+      <div class="image-slider relative">
+        ${imageSlides}
+      </div>
+      <div class="slider-controls flex justify-center gap-x-8 mt-2 mb-2">
+        <button onclick="prevImage(this)" class="text-2xl">←</button>
+        <button onclick="nextImage(this)" class="text-2xl">→</button>
+      </div>
+      <div class="text-center">
+        <h3 class="text-ml mt-3">${item.name}</h3>
+        <p class="text-pink-600 font-bold">$${item.price.toFixed(2)}</p>
+        <div id="${safeName}-btn">
+          <button
+            onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn')"
+            class="bg-yellow-300 hover:bg-yellow-500 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm"
+            ${item.stock === 0 ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
+            ${item.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
   });
 }
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
 
   updateCartCount();
-  console.log("✅ DOM loaded, calling loadInventory()");
   loadInventory();
 
   const form = document.getElementById('contact-form');
