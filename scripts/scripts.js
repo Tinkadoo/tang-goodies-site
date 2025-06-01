@@ -189,7 +189,6 @@ async function loadInventory() {
 
   // 🔍 Log items values
   data.forEach(item => {
-    // console.log(`item_id: ${item.id}, item_name: ${item.name}, item_price: ${item.price}, item_stock: ${item.stock}, item_image_path: ${item.image_path}`);
 
     const safeName = item.name.replace(/\s+/g, '-').toLowerCase();
     const imageFolder = item.image_path;
@@ -215,12 +214,10 @@ async function loadInventory() {
       <div class="text-center">
         <h3 class="text-ml mt-3">${item.name}</h3>
         <div class="mt-1 mb-1">
-
           <p class="text-pink-600 font-bold text-lg">$${item.price.toFixed(2)}</p>
           <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium mt-1">
             In Stock: ${item.stock}
           </span>
-
         </div>
         <div id="${safeName}-btn">
           <button
