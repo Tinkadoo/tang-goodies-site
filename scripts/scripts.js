@@ -195,7 +195,9 @@ async function loadInventory() {
     // Build dynamic image slider HTML
     const imageSlides = imageList.map((filename, index) => {
       const activeClass = index === 0 ? 'active' : '';
-      return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} rounded-md" />`;
+      // return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} rounded-md" />`;
+      return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} h-44 w-full object-contain rounded-md" />`;
+
     }).join('');
 
     const card = document.createElement("div");
@@ -210,6 +212,7 @@ async function loadInventory() {
         <button onclick="nextImage(this)" class="text-2xl">→</button>
       </div>
       <div class="text-center">
+
         <h3 class="text-ml mt-3">${item.name}</h3>
         <div class="mt-1 mb-1">
           <p class="text-pink-600 font-bold text-lg">$${item.price.toFixed(2)}</p>
