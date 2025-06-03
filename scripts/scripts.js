@@ -204,13 +204,16 @@ async function loadInventory() {
     card.className = "product-card bg-white rounded-lg p-4 shadow-md";
 
     card.innerHTML = `
-      <div class="image-slider relative">
-        ${imageSlides}
+ 
+      <div class="image-slider relative group">
+      ${imageSlides}
+        <div class="absolute inset-0 flex justify-between items-center px-2 
+            opacity-100 sm:opacity-0 sm:group-hover:opacity-70 transition-opacity">
+          <button onclick="prevImage(this)" class="bg-white text-black rounded-full p-2 shadow">&larr;</button>
+          <button onclick="nextImage(this)" class="bg-white text-black rounded-full p-2 shadow">&rarr;</button>
+        </div>
       </div>
-      <div class="slider-controls flex justify-center gap-x-8 mt-2 mb-2">
-        <button onclick="prevImage(this)" class="text-2xl">←</button>
-        <button onclick="nextImage(this)" class="text-2xl">→</button>
-      </div>
+
       <div class="text-center">
 
         <h3 class="text-ml mt-3">${item.name}</h3>
