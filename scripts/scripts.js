@@ -226,10 +226,12 @@ async function loadInventory() {
         <div id="${safeName}-btn">
           <button
             onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn')"
-            class="bg-yellow-300 hover:bg-yellow-500 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm"
-            ${item.stock === 0 ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}>
+            class="bg-yellow-300 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm 
+                  ${item.stock === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500'}"
+            ${item.stock === 0 ? 'disabled' : ''}>
             ${item.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
           </button>
+
         </div>
       </div>
     `;
