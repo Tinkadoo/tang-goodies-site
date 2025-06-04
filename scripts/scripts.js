@@ -196,7 +196,7 @@ async function loadInventory() {
     const imageSlides = imageList.map((filename, index) => {
       const activeClass = index === 0 ? 'active' : '';
       // return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} rounded-md" />`;
-      return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} h-44 w-full object-contain rounded-md" />`;
+      return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} h-50 w-full object-contain rounded-md" />`;
 
     }).join('');
 
