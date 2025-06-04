@@ -213,8 +213,7 @@ async function loadInventory(selectedCategory = "All") {
     const createBtn = () => {
       const btn = document.createElement("button");
       btn.textContent = label;
-      btn.className = `whitespace-nowrap px-4 py-1 text-sm border border-gray-300 rounded-full
-                       hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}`;
+      btn.className = `px-4 py-1 text-sm border border-gray-300 rounded-full hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}`;
       btn.addEventListener("click", () => loadInventory(cat));
       return btn;
     };
