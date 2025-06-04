@@ -3,8 +3,7 @@
 .product-card {
   background: #ffeef2;
   border-radius: 10px;
-  /* padding: 0rem 0rem 0rem 0.5rem; */
-  width: 250px;
+  width: 90%;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
