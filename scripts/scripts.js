@@ -180,9 +180,11 @@ const supabase = window.supabase.createClient(
 async function loadInventory(selectedCategory = "All") {
 
   const container = document.getElementById("product-list");
-  const categoryBtnContainer = document.getElementById("categoryButtons");
+  const categoryBtnContainerMobile = document.getElementById("categoryButtons");
+  const categoryBtnContainerDesktop = document.getElementById("categoryButtonsDesktop");
 
-  if (!container || !categoryBtnContainer) return; // Skip on pages other than shop.html
+  if (!container || !categoryBtnContainerMobile || !categoryBtnContainerDesktop) return;
+ // Skip on pages other than shop.html
 
   const { data, error } = await supabase.from("inventory").select("*");
 
@@ -200,20 +202,25 @@ async function loadInventory(selectedCategory = "All") {
   const allCategories = [...new Set(data.map(item => item.category))].sort();
   const categories = ["All", ...allCategories];
 
-  categoryBtnContainer.innerHTML = ""; // Clear old buttons
+  categoryBtnContainerMobile.innerHTML = "";
+  categoryBtnContainerDesktop.innerHTML = "";
 
   categories.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.textContent = cat === "All" ? "All" : cat.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-    btn.className = `bg-white border border-gray-300 rounded-full px-3 py-1 text-sm 
-                     hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 font-semibold' : ''}`;
-    btn.setAttribute("data-category", cat);
-
-    btn.addEventListener("click", () => {
-      loadInventory(cat);
-    });
-
-    categoryBtnContainer.appendChild(btn);
+    const label = cat === "All"
+      ? "All"
+      : cat.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+  
+    const createBtn = () => {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      btn.className = `whitespace-nowrap px-4 py-1 text-sm border border-gray-300 rounded-full
+                       hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}`;
+      btn.addEventListener("click", () => loadInventory(cat));
+      return btn;
+    };
+  
+    categoryBtnContainerMobile.appendChild(createBtn());
+    categoryBtnContainerDesktop.appendChild(createBtn());
   });
 
   // 🧸 Render product cards
