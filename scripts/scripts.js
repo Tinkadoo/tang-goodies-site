@@ -342,25 +342,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
     orderDetails.value = summary;
 
-    const nameInput = checkoutForm.querySelector('input[name="Name"]');
-    const phoneInput = checkoutForm.querySelector('input[name="Phone"]');
-    const emailInput = checkoutForm.querySelector('input[name="Email"]');
-    const streetInput = checkoutForm.querySelector('input[name="Street Address"]');
-    const cityInput = checkoutForm.querySelector('input[name="City"]');
-
-    // Enable PayPal button only if both name and phone are filled
+    const requiredFields = [
+      'Name',
+      'Phone',
+      'Email',
+      'Street Address',
+      'City'
+    ];
+    
+    const inputElements = requiredFields.map(field =>
+      checkoutForm.querySelector(`input[name="${field}"]`)
+    );
+    
+    // Enable PayPal button only if all required fields are filled
     function validateFormInputs() {
-      const isValid = nameInput.value.trim() && phoneInput.value.trim() && emailInput.value.trim() && streetInput.value.trim() && cityInput.value.trim();
-      if (isValid) {
+      const allFilled = inputElements.every(input => input.value.trim());
+      if (allFilled) {
         paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
-      } 
+      } else {
+        paypalButtonContainer.classList.add("pointer-events-none", "opacity-50");
+      }
     }
-
-    nameInput.addEventListener("input", validateFormInputs);
-    phoneInput.addEventListener("input", validateFormInputs);
-    emailInput.addEventListener("input", validateFormInputs);
-    streetInput.addEventListener("input", validateFormInputs);
-    cityInput.addEventListener("input", validateFormInputs);
+    
+    // Add input event listener to each required input
+    inputElements.forEach(input => {
+      input.addEventListener("input", validateFormInputs);
+    });
+    
 
     checkoutForm.addEventListener("submit", (event) => {
       
