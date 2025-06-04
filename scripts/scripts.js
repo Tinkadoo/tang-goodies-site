@@ -78,7 +78,13 @@ function renderCart() {
   if (cartData.length === 0) {
     emptyMessage.classList.remove("hidden");
     checkoutBtn.disabled = true;
-    subtotalEl.textContent = "$0.00";
+
+    // 🧹 Reset all values when cart is empty
+    document.getElementById("subtotal").textContent = "$0.00";
+    document.getElementById("tax").textContent = "$0.00";
+    document.getElementById("paypal-fee").textContent = "$0.00";
+    document.getElementById("total").textContent = "$0.00";
+    
     return;
   } else {
     emptyMessage.classList.add("hidden");
