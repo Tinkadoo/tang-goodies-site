@@ -293,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadInventory();
 
+  // Contact form logic
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
@@ -329,6 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkoutForm = document.getElementById("checkout-form");
   const orderDetails = document.getElementById("order-details");
   const confirmation = document.getElementById("order-confirmation");
+  const paypalButtonContainer = document.getElementById("paypal-button-container");
 
   if (checkoutForm && orderDetails && confirmation) {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -340,7 +342,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
     orderDetails.value = summary;
 
-    checkoutForm.addEventListener("submit", () => {
+    const nameInput = checkoutForm.querySelector('input[name="Name"]');
+    const phoneInput = checkoutForm.querySelector('input[name="Phone"]');
+    const emailInput = checkoutForm.querySelector('input[name="Email"]');
+    const streetInput = checkoutForm.querySelector('input[name="Street Address"]');
+    const cityInput = checkoutForm.querySelector('input[name="City"]');
+
+    // Enable PayPal button only if both name and phone are filled
+    function validateFormInputs() {
+      const isValid = nameInput.value.trim() && phoneInput.value.trim() && emailInput.value.trim() && streetInput.value.trim() && cityInput.value.trim();
+      if (isValid) {
+        paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
+      } 
+    }
+
+    nameInput.addEventListener("input", validateFormInputs);
+    phoneInput.addEventListener("input", validateFormInputs);
+    emailInput.addEventListener("input", validateFormInputs);
+    streetInput.addEventListener("input", validateFormInputs);
+    cityInput.addEventListener("input", validateFormInputs);
+
+    checkoutForm.addEventListener("submit", (event) => {
+      
+      if (!nameInput.value.trim()) {
+        event.preventDefault(); // Prevent form submission
+        alert("Please enter your name.");
+        nameInput.focus();
+        return;
+      }
+
+      paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
+
       setTimeout(() => {
         localStorage.removeItem("cart");
         confirmation.classList.remove("hidden");
