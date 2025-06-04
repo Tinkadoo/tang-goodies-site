@@ -359,8 +359,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const allFilled = inputElements.every(input => input.value.trim());
       if (allFilled) {
         paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
-      } else {
-        paypalButtonContainer.classList.add("pointer-events-none", "opacity-50");
       }
     }
     
