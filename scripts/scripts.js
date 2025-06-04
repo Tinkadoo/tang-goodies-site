@@ -213,7 +213,20 @@ async function loadInventory(selectedCategory = "All") {
     const createBtn = () => {
       const btn = document.createElement("button");
       btn.textContent = label;
-      btn.className = `px-4 py-1 text-sm border border-gray-300 rounded-full hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}`;
+      btn.className = `
+        inline-block 
+        w-auto 
+        max-w-full 
+        px-4 py-1 
+        text-sm 
+        border border-gray-300 
+        rounded-full 
+        text-center 
+        whitespace-nowrap 
+        hover:bg-yellow-200 
+        ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}
+      `;
+
       btn.addEventListener("click", () => loadInventory(cat));
       return btn;
     };
