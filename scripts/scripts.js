@@ -290,10 +290,9 @@ async function loadInventory(selectedCategory = "All") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
   updateCartCount();
   loadInventory();
- 
+
   const form = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
@@ -301,9 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form && sendBtn && thankYouMsg) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-
       const formData = new FormData(form);
-
       fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243", {
         method: "POST",
         body: formData,
@@ -327,7 +324,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cartItemsContainer) {
     renderCart();
   }
-  
 
   // ✅ New: Checkout page logic
   const checkoutForm = document.getElementById("checkout-form");
@@ -354,37 +350,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // paypal.Buttons({
-  //   createOrder: function(data, actions) {
-  //     // Dynamically calculate total from cart
-  //     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  //     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
-  
-  //     return actions.order.create({
-  //       purchase_units: [{
-  //         amount: {
-  //           value: total
-  //         }
-  //       }]
-  //     });
-  //   },
-  //   onApprove: function(data, actions) {
-  //     return actions.order.capture().then(function(details) {
-  //       alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
-        
-  //       // ✅ Clear cart, show confirmation, etc.
-  //       localStorage.removeItem("cart");
-  //       updateCartCount();
-  
-  //       const confirmation = document.getElementById("order-confirmation");
-  //       const checkoutForm = document.getElementById("checkout-form");
-  //       if (confirmation && checkoutForm) {
-  //         confirmation.classList.remove("hidden");
-  //         checkoutForm.classList.add("hidden");
-  //       }
-  //     });
-  //   }
-  // }).render('#paypal-button-container');
-  
+  // ✅ Only render PayPal button if SDK loaded and container exists
+  if (typeof paypal !== 'undefined' && document.getElementById("paypal-button-container")) {
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
+
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: total
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
+          localStorage.removeItem("cart");
+          updateCartCount();
+
+          const confirmation = document.getElementById("order-confirmation");
+          const checkoutForm = document.getElementById("checkout-form");
+          if (confirmation && checkoutForm) {
+            confirmation.classList.remove("hidden");
+            checkoutForm.classList.add("hidden");
+          }
+        });
+      }
+    }).render('#paypal-button-container');
+  }
 });
+
 
