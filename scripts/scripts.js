@@ -367,25 +367,6 @@ document.addEventListener("DOMContentLoaded", () => {
       input.addEventListener("input", validateFormInputs);
     });
     
-
-    checkoutForm.addEventListener("submit", (event) => {
-      
-      if (!nameInput.value.trim()) {
-        event.preventDefault(); // Prevent form submission
-        alert("Please enter your name.");
-        nameInput.focus();
-        return;
-      }
-
-      paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
-
-      setTimeout(() => {
-        localStorage.removeItem("cart");
-        confirmation.classList.remove("hidden");
-        checkoutForm.classList.add("hidden");
-        updateCartCount();
-      }, 500);
-    });
   }
 
   // ✅ Only render PayPal button if SDK loaded and container exists
