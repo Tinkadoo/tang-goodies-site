@@ -214,18 +214,15 @@ async function loadInventory(selectedCategory = "All") {
       const btn = document.createElement("button");
       btn.textContent = label;
       btn.className = `
-        inline-block 
-        w-auto 
-        max-w-full 
-        px-4 py-1 
-        text-sm 
-        border border-gray-300 
-        rounded-full 
-        text-center 
-        whitespace-nowrap 
-        hover:bg-yellow-200 
+        flex items-center justify-center
+        min-w-fit max-w-full
+        px-4 py-1 text-sm
+        border border-gray-300 rounded-full
+        whitespace-nowrap overflow-hidden truncate
+        hover:bg-yellow-200
         ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}
       `;
+
 
       btn.addEventListener("click", () => loadInventory(cat));
       return btn;
