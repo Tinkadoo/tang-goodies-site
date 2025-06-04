@@ -84,7 +84,7 @@ function renderCart() {
     document.getElementById("tax").textContent = "$0.00";
     document.getElementById("paypal-fee").textContent = "$0.00";
     document.getElementById("total").textContent = "$0.00";
-    
+
     return;
   } else {
     emptyMessage.classList.add("hidden");
@@ -177,10 +177,12 @@ const supabase = window.supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpma2JjbXJ2Ym1zaWthYndwanJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MTY2MTAsImV4cCI6MjA2NDA5MjYxMH0.kQ6g8Ief2IRDzWMsatT2KtxfROHDT1HvGll7mMNsSg8'
 );
 
-async function loadInventory() {
+async function loadInventory(selectedCategory = "All") {
 
   const container = document.getElementById("product-list");
-  if (!container) return; // Skip on pages other than shop.html
+  const categoryBtnContainer = document.getElementById("categoryButtons");
+
+  if (!container || !categoryBtnContainer) return; // Skip on pages other than shop.html
 
   const { data, error } = await supabase.from("inventory").select("*");
 
@@ -189,10 +191,35 @@ async function loadInventory() {
     return;
   }
 
+  // 🧼 Filter inventory by selected category
+  const filtered = selectedCategory === "All"
+    ? data
+    : data.filter(item => item.category === selectedCategory);
+
+  // ✅ Create unique category buttons dynamically
+  const allCategories = [...new Set(data.map(item => item.category))].sort();
+  const categories = ["All", ...allCategories];
+
+  categoryBtnContainer.innerHTML = ""; // Clear old buttons
+
+  categories.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.textContent = cat === "All" ? "All" : cat.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+    btn.className = `bg-white border border-gray-300 rounded-full px-3 py-1 text-sm 
+                     hover:bg-yellow-200 ${cat === selectedCategory ? 'bg-yellow-400 font-semibold' : ''}`;
+    btn.setAttribute("data-category", cat);
+
+    btn.addEventListener("click", () => {
+      loadInventory(cat);
+    });
+
+    categoryBtnContainer.appendChild(btn);
+  });
+
+  // 🧸 Render product cards
   container.innerHTML = "";
 
-  // 🔍 Log items values
-  data.forEach(item => {
+  filtered.forEach(item => {
 
     const safeName = item.name.replace(/\s+/g, '-').toLowerCase();
     const imageFolder = item.image_path;
