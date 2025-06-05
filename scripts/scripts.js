@@ -386,15 +386,33 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          localStorage.removeItem("cart");
-          updateCartCount();
+          
+          const form = document.getElementById("checkout-form");
 
-          const confirmation = document.getElementById("order-confirmation");
-          const checkoutForm = document.getElementById("checkout-form");
-          if (confirmation && checkoutForm) {
-            confirmation.classList.remove("hidden");
-            checkoutForm.classList.add("hidden");
-          }
+          // Build form data manually
+          const formData = new FormData(form);
+
+          fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243", {
+            method: "POST",
+            body: formData,
+            headers: {
+              Accept: "application/json"
+            }
+          })
+          .then(response => {
+            if(response.ok) {
+              localStorage.removeItem("cart");
+              updateCartCount();
+
+              document.getElementById("order-confirmation")?.classList.remove("hidden");
+              form.classList.add("hidden");
+            } else {
+              alert("There was an issue with your order. Please try again.");
+            }
+          })
+          .catch(() => {
+            alert("Network error. Please try again.");
+          });
         });
       }
     }).render('#paypal-button-container');
