@@ -56,7 +56,10 @@
         <main class="text-gray-800 min-h-screen flex flex-col px-4 py-8">
             <div class="w-full sm:w-1/2 max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
                 <h1 class="text-3xl font-bold mb-4 text-left">Checkout</h1>
-                <hr class="border-t border-gray-300 mb-6">
+                <hr class="border-t border-gray-300 mb-4">
+                <p class="text-sm text-gray-500 mb-4 text-right">
+                    <span class="text-red-500">*</span> Required fields
+                </p>
 
                 <form 
                     id="checkout-form" 
@@ -70,30 +73,40 @@
                     
                     <div class="mb-4 grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-semibold mb-1">Name:</label>
+                            <label class="block font-semibold mb-1">
+                                Name <span class="text-red-500">*</span>
+                            </label>
                             <input name="Name" required class="border p-2 rounded w-full mb-4">
                         </div>
                         <div>
-                            <label class="block font-semibold mb-1">Phone:</label>
+                            <label class="block font-semibold mb-1">
+                                Phone <span class="text-red-500">*</span>
+                            </label>
                             <input name="Phone" required class="border p-2 rounded w-full mb-4">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block font-semibold mb-1">Email:</label>
+                        <label class="block font-semibold mb-1">
+                            Email <span class="text-red-500">*</span>
+                        </label>
                         <input name="Email" type="email" required class="border p-2 rounded w-full mb-4">
                     </div>
                             
                     <!-- Street Address -->
                     <div class="mb-4">
-                        <label class="block font-semibold mb-1">Street Address:</label>
+                        <label class="block font-semibold mb-1">
+                            Street Address <span class="text-red-500">*</span>
+                        </label>
                         <input name="Street Address" required class="border p-2 rounded w-full">
                     </div>                   
   
                     <!-- City, State and ZIP --> 
                     <div class="mb-4 grid grid-cols-3 gap-3">
                         <div>
-                            <label class="block font-semibold mb-1">City:</label>
+                            <label class="block font-semibold mb-1">
+                                City <span class="text-red-500">*</span>
+                            </label>
                             <input name="City" required class="border p-2 rounded w-full">
                         </div>
                         <div>
