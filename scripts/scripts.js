@@ -386,7 +386,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
           localStorage.removeItem("cart");
           updateCartCount();
 
