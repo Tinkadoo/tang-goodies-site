@@ -45,10 +45,16 @@ function updateCartCount() {
 
 function getQtyControlsHTML(index, qty) {
   return `
-    <div class="flex items-center justify-center space-x-2 mt-2">
-      <button onclick="updateQuantity(${index}, -1)" class="px-2 py-1 bg-gray-300 rounded">−</button>
-      <span class="min-w-[24px] text-center font-semibold">${qty}</span>
-      <button onclick="updateQuantity(${index}, 1)" class="px-2 py-1 bg-gray-300 rounded">+</button>
+    <div class="flex items-center justify-center space-x-2 py-1 mt-2">
+      <button onclick="updateQuantity(${index}, -1)"
+        class="bg-yellow-300 hover:bg-yellow-500 text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all">
+        −
+      </button>
+      <span class="min-w-[24px] w-6 text-center text-sm font-semibold">${qty}</span>
+      <button onclick="updateQuantity(${index}, 1)"
+        class="bg-yellow-300 hover:bg-yellow-500 text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all">
+        +
+      </button>
     </div>
   `;
 }
