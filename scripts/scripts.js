@@ -43,6 +43,16 @@ function updateCartCount() {
   }
 }
 
+function getQtyControlsHTML(index, qty) {
+  return `
+    <div class="flex items-center justify-center space-x-2 mt-2">
+      <button onclick="updateQuantity(${index}, -1)" class="px-2 py-1 bg-gray-300 rounded">−</button>
+      <span class="min-w-[24px] text-center font-semibold">${qty}</span>
+      <button onclick="updateQuantity(${index}, 1)" class="px-2 py-1 bg-gray-300 rounded">+</button>
+    </div>
+  `;
+}
+
   
 function addToCart(name, price, imageUrl, containerId) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -58,7 +68,9 @@ function addToCart(name, price, imageUrl, containerId) {
   updateCartCount();
 
   const container = document.getElementById(containerId);
-  container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
+  const itemIndex = cart.findIndex(item => item.name === name);
+  container.innerHTML = getQtyControlsHTML(itemIndex, cart[itemIndex].qty);
+  // container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
 }
 
 
@@ -139,12 +151,23 @@ function updateSubtotal() {
 
       
 function updateQuantity(index, change) {
-    if (!cartData[index]) return;
-    cartData[index].qty = Math.max(1, cartData[index].qty + change);
-    saveCart();
-    renderCart();
-    updateCartCount();
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  if (!cart[index]) return;
+
+  cart[index].qty = Math.max(1, cart[index].qty + change);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+
+  const item = cart[index];
+  const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
+  const container = document.getElementById(containerId);
+  if (container) {
+    // 🔁 Get fresh cart again so qty is up-to-date
+    const latestCart = JSON.parse(localStorage.getItem('cart')) || [];
+    container.innerHTML = getQtyControlsHTML(index, latestCart[index].qty);
+  }
 }
+
       
 function setQuantity(index, value) {
     if (!cartData[index]) return;
