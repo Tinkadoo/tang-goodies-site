@@ -294,24 +294,24 @@ document.addEventListener("DOMContentLoaded", () => {
   loadInventory();
 
   // Contact form logic
-  const form = document.getElementById('contact-form');
+  const contactForm = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
 
-  if (form && sendBtn && thankYouMsg) {
-    form.addEventListener('submit', function (e) {
+  if (contactForm && sendBtn && thankYouMsg) {
+    contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      const formData = new FormData(form);
+      const contactFormData = new FormData(contactForm);
       fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243", {
         method: "POST",
-        body: formData,
+        body: contactFormData,
         headers: { Accept: "application/json" }
       })
         .then(response => {
           if (response.ok) {
             sendBtn.classList.add("hidden");
             thankYouMsg.classList.remove("hidden");
-            form.reset();
+            contactForm.reset();
           } else {
             sendBtn.innerText = "Something went wrong. Try again.";
           }
