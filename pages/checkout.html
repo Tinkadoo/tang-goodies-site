@@ -61,28 +61,22 @@
                     <span class="text-red-500">*</span> Required fields
                 </p>
 
-                <form 
-                    id="checkout-form" 
-                    method="POST" 
-                    action="https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243">
+                <form id="checkout-form">
 
-                    <input type="hidden" name="_subject" value="New Order from Tang Goodies">
-                    <input type="hidden" name="_template" value="box">
-                    <input type="hidden" name="_template" value="table">
-                    <input type="hidden" name="Order" id="order-details">
+                    <input type="hidden" id="order-details">
                     
                     <div class="mb-4 grid grid-cols-2 gap-3">
                         <div>
                             <label class="block font-semibold mb-1">
                                 Name <span class="text-red-500">*</span>
                             </label>
-                            <input name="Name" required class="border p-2 rounded w-full mb-4">
+                            <input id="name" required class="border p-2 rounded w-full mb-4">
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">
                                 Phone <span class="text-red-500">*</span>
                             </label>
-                            <input name="Phone" required class="border p-2 rounded w-full mb-4">
+                            <input id="phone" required class="border p-2 rounded w-full mb-4">
                         </div>
                     </div>
 
@@ -90,7 +84,7 @@
                         <label class="block font-semibold mb-1">
                             Email <span class="text-red-500">*</span>
                         </label>
-                        <input name="Email" type="email" required class="border p-2 rounded w-full mb-4">
+                        <input id="email" type="email" required class="border p-2 rounded w-full mb-4">
                     </div>
                             
                     <!-- Street Address -->
@@ -98,7 +92,7 @@
                         <label class="block font-semibold mb-1">
                             Street Address <span class="text-red-500">*</span>
                         </label>
-                        <input name="Street Address" required class="border p-2 rounded w-full">
+                        <input id="address" required class="border p-2 rounded w-full">
                     </div>                   
   
                     <!-- City, State and ZIP --> 
@@ -107,11 +101,11 @@
                             <label class="block font-semibold mb-1">
                                 City <span class="text-red-500">*</span>
                             </label>
-                            <input name="City" required class="border p-2 rounded w-full">
+                            <input id="city" required class="border p-2 rounded w-full">
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">State</label>
-                            <input name="State" value="TX" readonly class="border p-2 rounded w-full bg-gray-100 cursor-not-allowed">
+                            <input id="state" value="TX" readonly class="border p-2 rounded w-full bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                         <label class="block font-semibold mb-1">ZIP Code</label>
@@ -124,10 +118,9 @@
                         Delivery Instruction (optional):
                     </label>
 
-                    <textarea name="Notes" class="border p-2 rounded w-full mb-4"></textarea>
+                    <textarea id="notes" class="border p-2 rounded w-full mb-4"></textarea>
         
                     <div id="paypal-button-container" class="mt-4 pointer-events-none opacity-50"></div>
-  
                 </form>
 
                 <div id="order-confirmation" class="hidden text-green-700 mt-4 font-semibold">

@@ -327,31 +327,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ New: Checkout page logic
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const checkoutForm = document.getElementById("checkout-form");
-  const orderDetails = document.getElementById("order-details");
+  // const orderDetails = document.getElementById("order-details");
   const confirmation = document.getElementById("order-confirmation");
   const paypalButtonContainer = document.getElementById("paypal-button-container");
 
-  if (checkoutForm && orderDetails && confirmation) {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  if (checkoutForm && confirmation && confirmation) {
 
-    if (cart.length === 0) {
-      window.location.href = "cart.html";
-    }
-
-    const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
-    orderDetails.value = summary;
+    if (cart.length === 0) window.location.href = "cart.html";
 
     const requiredFields = [
-      'Name',
-      'Phone',
-      'Email',
-      'Street Address',
-      'City'
+      'name',
+      'phone',
+      'email',
+      'address',
+      'city'
     ];
     
     const inputElements = requiredFields.map(field =>
-      checkoutForm.querySelector(`input[name="${field}"]`)
+      checkoutForm.querySelector(`input[id="${field}"]`)
     );
     
     // Enable PayPal button only if all required fields are filled
@@ -384,36 +379,36 @@ document.addEventListener("DOMContentLoaded", () => {
           }]
         });
       },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
+      onApprove: async function(data, actions) {
+        const details = await actions.order.capture();
           
-          const form = document.getElementById("checkout-form");
+        // Build order data
+        const orderData = {
+          name: document.getElementById("name").value,
+          phone: document.getElementById("phone").value,
+          email: document.getElementById("email").value,
+          address: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          state: document.getElementById("state").value,
+          zip: document.getElementById("zip-checkout").value,
+          notes: document.getElementById("notes").value,
+          items: cart,
+          payment_id: details.id,
+          amount: details.purchase_units[0].amount.value,
+          created_at: new Date().toISOString()
+        };
 
-          // Build form data manually
-          const formData = new FormData(form);
+        // Save to Supabase
+        const { error } = await supabase.from("orders").insert([orderData]);
 
-          fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243", {
-            method: "POST",
-            body: formData,
-            headers: {
-              Accept: "application/json"
-            }
-          })
-          .then(response => {
-            if(response.ok) {
-              localStorage.removeItem("cart");
-              updateCartCount();
-
-              document.getElementById("order-confirmation")?.classList.remove("hidden");
-              form.classList.add("hidden");
-            } else {
-              alert("There was an issue with your order. Please try again.");
-            }
-          })
-          .catch(() => {
-            alert("Network error. Please try again.");
-          });
-        });
+        if (!error) {
+          confirmation.classList.remove("hidden");
+          localStorage.removeItem("cart");
+          updateCartCount();
+        } else {
+          alert("Failed to save order.");
+          console.error("Supabase error:", error.message);
+        }
       }
     }).render('#paypal-button-container');
   }
