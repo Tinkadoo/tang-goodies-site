@@ -199,14 +199,17 @@ function removeItem(index) {
 
 
 function updateCheckoutState() {
+  const { subtotal } = calculateTotal();
+
   if (checkoutBtn) {
-    if (cartData.length === 0) {
-      checkoutBtn.classList.add("opacity-50", "pointer-events-none");
-    } else {
-      checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
-    }
+    const isDisabled = cartData.length === 0 || subtotal < 10;
+
+    checkoutBtn.disabled = isDisabled;
+    checkoutBtn.classList.toggle("opacity-50", isDisabled);
+    checkoutBtn.classList.toggle("pointer-events-none", isDisabled);
   }
 }
+
 
 const supabase = window.supabase.createClient(
   'https://zfkbcmrvbmsikabwpjrh.supabase.co',
