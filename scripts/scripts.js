@@ -200,15 +200,20 @@ function removeItem(index) {
 
 function updateCheckoutState() {
   const { subtotal } = calculateTotal();
+  const isDisabled = cartData.length === 0 || subtotal < 10;
 
   if (checkoutBtn) {
-    const isDisabled = cartData.length === 0 || subtotal < 10;
-
     checkoutBtn.disabled = isDisabled;
     checkoutBtn.classList.toggle("opacity-50", isDisabled);
     checkoutBtn.classList.toggle("pointer-events-none", isDisabled);
   }
+
+  const warning = document.getElementById("min-order-warning");
+  if (warning) {
+    warning.classList.toggle("hidden", subtotal >= 10);
+  }
 }
+
 
 
 const supabase = window.supabase.createClient(
