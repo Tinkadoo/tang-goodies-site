@@ -135,22 +135,29 @@ function renderCart() {
   updateSubtotal();
 }
 
+function calculateTotal() {
+  const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const tax = subtotal * 0.0825;
+  const fee = subtotal > 0 ? (subtotal * 0.0299 + 0.49) : 0;
+  const total = subtotal + tax + fee;
+
+  return {
+    subtotal: parseFloat(subtotal.toFixed(2)),
+    tax: parseFloat(tax.toFixed(2)),
+    fee: parseFloat(fee.toFixed(2)),
+    total: parseFloat(total.toFixed(2))
+  };
+}
+
 
 function updateSubtotal() {
-  const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxRate = 0.0825;
-  const paypalPercent = 0.0299;
-  const paypalFixed = 0.49;
-
-  const taxAmount = subtotal * taxRate;
-  const processingFee = subtotal > 0 ? (subtotal * paypalPercent + paypalFixed) : 0;
-  const total = subtotal + taxAmount + processingFee;
+  const { subtotal, tax, fee, total } = calculateTotal();
 
   // Update UI
-  document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById("tax").textContent = `$${taxAmount.toFixed(2)}`;
-  document.getElementById("paypal-fee").textContent = `$${processingFee.toFixed(2)}`;
-  document.getElementById("total").textContent = `$${total.toFixed(2)}`;
+  document.getElementById("subtotal").textContent = `$${subtotal}`;
+  document.getElementById("tax").textContent = `$${tax}`;
+  document.getElementById("paypal-fee").textContent = `$${fee}`;
+  document.getElementById("total").textContent = `$${total}`;
 
   updateCheckoutState();
 }
@@ -319,30 +326,28 @@ async function loadInventory(selectedCategory = "All") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
   updateCartCount();
   loadInventory();
- 
-  const form = document.getElementById('contact-form');
+
+  // Contact form logic
+  const contactForm = document.getElementById('contact-form');
   const sendBtn = document.getElementById('send-button');
   const thankYouMsg = document.getElementById('thank-you-message');
 
-  if (form && sendBtn && thankYouMsg) {
-    form.addEventListener('submit', function (e) {
+  if (contactForm && sendBtn && thankYouMsg) {
+    contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
-
-      const formData = new FormData(form);
-
+      const contactFormData = new FormData(contactForm);
       fetch("https://formsubmit.co/57c9d1f17018a7ef4c41876a3b269243", {
         method: "POST",
-        body: formData,
+        body: contactFormData,
         headers: { Accept: "application/json" }
       })
         .then(response => {
           if (response.ok) {
             sendBtn.classList.add("hidden");
             thankYouMsg.classList.remove("hidden");
-            form.reset();
+            contactForm.reset();
           } else {
             sendBtn.innerText = "Something went wrong. Try again.";
           }
@@ -356,64 +361,93 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cartItemsContainer) {
     renderCart();
   }
-  
 
   // ✅ New: Checkout page logic
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const checkoutForm = document.getElementById("checkout-form");
-  const orderDetails = document.getElementById("order-details");
   const confirmation = document.getElementById("order-confirmation");
+  const paypalButtonContainer = document.getElementById("paypal-button-container");
 
-  if (checkoutForm && orderDetails && confirmation) {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  if (checkoutForm && confirmation) {
 
-    if (cart.length === 0) {
-      window.location.href = "cart.html";
+    if (cart.length === 0) window.location.href = "cart.html";
+
+    const requiredFields = [
+      'name',
+      'phone',
+      'email',
+      'address',
+      'city'
+    ];
+    
+    const inputElements = requiredFields.map(field =>
+      checkoutForm.querySelector(`input[id="${field}"]`)
+    );
+    
+    // Enable PayPal button only if all required fields are filled
+    function validateFormInputs() {
+      const allFilled = inputElements.every(input => input.value.trim());
+      if (allFilled) {
+        paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
+      }
     }
-
-    const summary = cart.map(item => `${item.name} x ${item.qty} @ $${item.price.toFixed(2)}`).join(", ");
-    orderDetails.value = summary;
-
-    checkoutForm.addEventListener("submit", () => {
-      setTimeout(() => {
-        localStorage.removeItem("cart");
-        confirmation.classList.remove("hidden");
-        checkoutForm.classList.add("hidden");
-        updateCartCount();
-      }, 500);
+    
+    // Add input event listener to each required input
+    inputElements.forEach(input => {
+      input.addEventListener("input", validateFormInputs);
     });
+    
   }
 
-  // paypal.Buttons({
-  //   createOrder: function(data, actions) {
-  //     // Dynamically calculate total from cart
-  //     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  //     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
-  
-  //     return actions.order.create({
-  //       purchase_units: [{
-  //         amount: {
-  //           value: total
-  //         }
-  //       }]
-  //     });
-  //   },
-  //   onApprove: function(data, actions) {
-  //     return actions.order.capture().then(function(details) {
-  //       alert(`Thanks ${details.payer.name.given_name}, your payment was successful!`);
-        
-  //       // ✅ Clear cart, show confirmation, etc.
-  //       localStorage.removeItem("cart");
-  //       updateCartCount();
-  
-  //       const confirmation = document.getElementById("order-confirmation");
-  //       const checkoutForm = document.getElementById("checkout-form");
-  //       if (confirmation && checkoutForm) {
-  //         confirmation.classList.remove("hidden");
-  //         checkoutForm.classList.add("hidden");
-  //       }
-  //     });
-  //   }
-  // }).render('#paypal-button-container');
-  
+  // ✅ Only render PayPal button if SDK loaded and container exists
+  if (typeof paypal !== 'undefined' && document.getElementById("paypal-button-container")) {
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        console.log(subtotal, tax, fee, total)
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: total
+            }
+          }]
+        });
+      },
+      onApprove: async function(data, actions) {
+        const details = await actions.order.capture();
+          
+        // Build order data
+        const orderData = {
+          name: document.getElementById("name").value,
+          phone: document.getElementById("phone").value,
+          email: document.getElementById("email").value,
+          address: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          state: document.getElementById("state").value,
+          zip: document.getElementById("zip-checkout").value,
+          notes: document.getElementById("notes").value,
+          items: cart,
+          payment_id: details.id,
+          amount: details.purchase_units[0].amount.value,
+          source: window.location.origin,
+          created_at: new Date().toISOString()
+        };
+
+        // Save to Supabase
+        const { error } = await supabase.from("orders").insert([orderData]);
+
+        if (!error) {
+          confirmation.classList.remove("hidden");
+          checkoutForm.classList.add("hidden");
+          localStorage.removeItem("cart");
+          updateCartCount();
+        } else {
+          alert("Failed to save order.");
+          console.error("Supabase error:", error.message);
+        }
+      }
+    }).render('#paypal-button-container');
+  }
 });
+
 
