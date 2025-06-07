@@ -329,11 +329,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ New: Checkout page logic
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const checkoutForm = document.getElementById("checkout-form");
-  // const orderDetails = document.getElementById("order-details");
   const confirmation = document.getElementById("order-confirmation");
   const paypalButtonContainer = document.getElementById("paypal-button-container");
 
-  if (checkoutForm && confirmation && confirmation) {
+  if (checkoutForm && confirmation) {
 
     if (cart.length === 0) window.location.href = "cart.html";
 
@@ -404,6 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!error) {
           confirmation.classList.remove("hidden");
+          checkoutForm.classList.add("hidden");
           localStorage.removeItem("cart");
           updateCartCount();
         } else {
