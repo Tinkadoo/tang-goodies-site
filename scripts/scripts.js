@@ -395,6 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
           items: cart,
           payment_id: details.id,
           amount: details.purchase_units[0].amount.value,
+          source: window.location.origin,
           created_at: new Date().toISOString()
         };
 
