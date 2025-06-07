@@ -117,22 +117,29 @@ function renderCart() {
   updateSubtotal();
 }
 
+function calculateTotal() {
+  const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const tax = subtotal * 0.0825;
+  const fee = subtotal > 0 ? (subtotal * 0.0299 + 0.49) : 0;
+  const total = subtotal + tax + fee;
+
+  return {
+    subtotal: parseFloat(subtotal.toFixed(2)),
+    tax: parseFloat(tax.toFixed(2)),
+    fee: parseFloat(fee.toFixed(2)),
+    total: parseFloat(total.toFixed(2))
+  };
+}
+
 
 function updateSubtotal() {
-  const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxRate = 0.0825;
-  const paypalPercent = 0.0299;
-  const paypalFixed = 0.49;
-
-  const taxAmount = subtotal * taxRate;
-  const processingFee = subtotal > 0 ? (subtotal * paypalPercent + paypalFixed) : 0;
-  const total = subtotal + taxAmount + processingFee;
+  const { subtotal, tax, fee, total } = calculateTotal();
 
   // Update UI
-  document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById("tax").textContent = `$${taxAmount.toFixed(2)}`;
-  document.getElementById("paypal-fee").textContent = `$${processingFee.toFixed(2)}`;
-  document.getElementById("total").textContent = `$${total.toFixed(2)}`;
+  document.getElementById("subtotal").textContent = `$${subtotal}`;
+  document.getElementById("tax").textContent = `$${tax}`;
+  document.getElementById("paypal-fee").textContent = `$${fee}`;
+  document.getElementById("total").textContent = `$${total}`;
 
   updateCheckoutState();
 }
@@ -368,8 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
     paypal.Buttons({
       createOrder: function(data, actions) {
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
-
+        console.log(subtotal, tax, fee, total)
         return actions.order.create({
           purchase_units: [{
             amount: {
