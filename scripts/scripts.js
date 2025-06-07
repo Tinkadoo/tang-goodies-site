@@ -1,6 +1,7 @@
 const STORAGE_KEY = "cart";
 let cartData = loadCart();
 
+
 const cartItemsContainer = document.getElementById("cart-items");
 const subtotalEl = document.getElementById("subtotal");
 const checkoutBtn = document.getElementById("checkout-btn");
@@ -162,33 +163,32 @@ function updateSubtotal() {
   updateCheckoutState();
 }
 
-      
+
 function updateQuantity(index, change) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   if (!cart[index]) return;
 
   cart[index].qty = Math.max(1, cart[index].qty + change);
   localStorage.setItem('cart', JSON.stringify(cart));
+  cartData = cart; // Keep in sync
   updateCartCount();
 
-  const item = cart[index];
-  const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
-  const container = document.getElementById(containerId);
-  if (container) {
-    // 🔁 Get fresh cart again so qty is up-to-date
-    const latestCart = JSON.parse(localStorage.getItem('cart')) || [];
-    container.innerHTML = getQtyControlsHTML(index, latestCart[index].qty);
+  // Determine whether we are on the cart page or shop page
+  const isCartPage = !!document.getElementById("cart-items");
+
+  if (isCartPage) {
+    renderCart(); // Full re-render for cart page
+  } else {
+    // Update just the quantity controls in-place for shop page
+    const item = cart[index];
+    const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = getQtyControlsHTML(index, item.qty);
+    }
   }
 }
 
-      
-function setQuantity(index, value) {
-    if (!cartData[index]) return;
-    cartData[index].qty = Math.max(1, parseInt(value) || 1);
-    saveCart();
-    renderCart();
-    updateCartCount();
-}
       
 function removeItem(index) {
     cartData.splice(index, 1);
