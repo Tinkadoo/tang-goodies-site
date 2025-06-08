@@ -360,6 +360,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Shop page
   const allBtn = document.getElementById("allItemsBtn");
   const stockBtn = document.getElementById("inStockBtn");
+  const mobileAllBtn = document.getElementById("allItemsBtnMobile");
+  const mobileStockBtn = document.getElementById("inStockBtnMobile");
 
   if (allBtn && stockBtn) {
     allBtn.addEventListener("click", () => {
@@ -386,6 +388,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (mobileAllBtn && mobileStockBtn) {
+    mobileAllBtn.addEventListener("click", () => {
+      mobileAllBtn.classList.add("bg-green-500", "text-white");
+      mobileAllBtn.classList.remove("bg-gray-200", "text-green-500");
+
+      mobileStockBtn.classList.add("bg-gray-200", "text-green-500");
+      mobileStockBtn.classList.remove("bg-green-500", "text-white");
+
+      // Store toggle state globally for loadInventory
+      window.__showInStockOnly = false;
+      loadInventory();
+    });
+
+    mobileStockBtn.addEventListener("click", () => {
+      mobileStockBtn.classList.add("bg-green-500", "text-white");
+      mobileStockBtn.classList.remove("bg-gray-200", "text-green-500");
+
+      mobileAllBtn.classList.add("bg-gray-200", "text-green-500");
+      mobileAllBtn.classList.remove("bg-green-500", "text-white");
+
+      window.__showInStockOnly = true;
+      loadInventory();
+    });
+  }
 
   // Contact form logic
   const contactForm = document.getElementById('contact-form');
