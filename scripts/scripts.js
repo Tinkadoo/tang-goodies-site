@@ -228,7 +228,7 @@ async function loadInventory(selectedCategory = "All") {
   const mobileCategorySelect = document.getElementById("mobile-category-select");
 
   if (!container || !categoryBtnContainerDesktop) return;
- // Skip on pages other than shop.html
+  // Skip on pages other than shop.html
 
   const { data, error } = await supabase.from("inventory").select("*");
 
@@ -238,9 +238,9 @@ async function loadInventory(selectedCategory = "All") {
   }
 
   // 🧼 Filter inventory by selected category
-  const filtered = selectedCategory === "All"
-    ? data
-    : data.filter(item => item.category === selectedCategory);
+  // const filtered = selectedCategory === "All"
+  //   ? data
+  //   : data.filter(item => item.category === selectedCategory);
 
   // ✅ Create unique category buttons dynamically
   const allCategories = [...new Set(data.map(item => item.category))].sort();
@@ -288,6 +288,15 @@ async function loadInventory(selectedCategory = "All") {
     mobileCategorySelect.value = selectedCategory;
     mobileCategorySelect.onchange = (e) => loadInventory(e.target.value);
   }  
+
+  const isInStoreOnly = document.getElementById("inStoreToggleDesktop")?.checked;
+
+  const filtered = data.filter(item => {
+    const categoryMatch = selectedCategory === "All" || item.category === selectedCategory;
+    const storeOnlyMatch = !isInStoreOnly || item.stock > 0;  // or your field name
+    return categoryMatch && storeOnlyMatch;
+  });
+
 
   // 🧸 Render product cards
   container.innerHTML = "";
@@ -349,6 +358,12 @@ async function loadInventory(selectedCategory = "All") {
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadInventory();
+
+  // Shop page
+  const inStoreToggle = document.getElementById("inStoreToggleDesktop");
+  if (inStoreToggle) {
+    inStoreToggle.addEventListener("change", () => loadInventory());
+  }
 
   // Contact form logic
   const contactForm = document.getElementById('contact-form');
