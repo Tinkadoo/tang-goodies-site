@@ -72,11 +72,27 @@
               <!-- Buttons go here -->
             </div>
 
-            <!-- In-Store Only Toggle -->
-            <div class="mt-4 flex items-center gap-2 text-sm font-medium text-gray-800">
-              <input type="checkbox" id="inStoreToggleDesktop" class="accent-pink-500 w-4 h-4">
-              <label for="inStoreToggleDesktop">In Stock Only</label>
+            <!-- All Items vs In Stock toggle -->
+            <div class="mt-6 flex justify-center">
+              <div class="flex w-48 h-7 rounded-full overflow-hidden">
+                <!-- All Items -->
+                <button
+                  id="allItemsBtn"
+                  class="flex-1 text-sm font-semibold transition-colors duration-300 bg-green-500 text-white"
+                >
+                  All Items
+                </button>
+            
+                <!-- In Stock -->
+                <button
+                  id="inStockBtn"
+                  class="flex-1 text-sm font-semibold transition-colors duration-300 bg-gray-200 text-green-500"
+                >
+                  In Stock
+                </button>
+              </div>
             </div>
+            
           </div>
         </div>
 

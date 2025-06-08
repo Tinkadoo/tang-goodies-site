@@ -237,12 +237,6 @@ async function loadInventory(selectedCategory = "All") {
     return;
   }
 
-  // 🧼 Filter inventory by selected category
-  // const filtered = selectedCategory === "All"
-  //   ? data
-  //   : data.filter(item => item.category === selectedCategory);
-
-  // ✅ Create unique category buttons dynamically
   const allCategories = [...new Set(data.map(item => item.category))].sort();
   const categories = ["All", ...allCategories];
 
@@ -289,14 +283,13 @@ async function loadInventory(selectedCategory = "All") {
     mobileCategorySelect.onchange = (e) => loadInventory(e.target.value);
   }  
 
-  const isInStoreOnly = document.getElementById("inStoreToggleDesktop")?.checked;
+  const isInStockOnly = window.__showInStockOnly === true;
 
   const filtered = data.filter(item => {
     const categoryMatch = selectedCategory === "All" || item.category === selectedCategory;
-    const storeOnlyMatch = !isInStoreOnly || item.stock > 0;  // or your field name
-    return categoryMatch && storeOnlyMatch;
+    const inStockMatch = !isInStockOnly || item.stock > 0;
+    return categoryMatch && inStockMatch;
   });
-
 
   // 🧸 Render product cards
   container.innerHTML = "";
@@ -359,11 +352,40 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadInventory();
 
-  // Shop page
-  const inStoreToggle = document.getElementById("inStoreToggleDesktop");
-  if (inStoreToggle) {
-    inStoreToggle.addEventListener("change", () => loadInventory());
+  // 🛒 Cart page
+  if (cartItemsContainer) {
+    renderCart();
   }
+
+  // Shop page
+  const allBtn = document.getElementById("allItemsBtn");
+  const stockBtn = document.getElementById("inStockBtn");
+
+  if (allBtn && stockBtn) {
+    allBtn.addEventListener("click", () => {
+      allBtn.classList.add("bg-green-500", "text-white");
+      allBtn.classList.remove("bg-gray-200", "text-green-500");
+
+      stockBtn.classList.add("bg-gray-200", "text-green-500");
+      stockBtn.classList.remove("bg-green-500", "text-white");
+
+      // Store toggle state globally for loadInventory
+      window.__showInStockOnly = false;
+      loadInventory();
+    });
+
+    stockBtn.addEventListener("click", () => {
+      stockBtn.classList.add("bg-green-500", "text-white");
+      stockBtn.classList.remove("bg-gray-200", "text-green-500");
+
+      allBtn.classList.add("bg-gray-200", "text-green-500");
+      allBtn.classList.remove("bg-green-500", "text-white");
+
+      window.__showInStockOnly = true;
+      loadInventory();
+    });
+  }
+
 
   // Contact form logic
   const contactForm = document.getElementById('contact-form');
@@ -394,9 +416,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (cartItemsContainer) {
-    renderCart();
-  }
 
   // ✅ New: Checkout page logic
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
