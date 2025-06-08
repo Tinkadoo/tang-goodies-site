@@ -60,11 +60,12 @@
         <div class="w-full sm:w-1/6 sm:pr-4 pb-4">
 
           <!-- Mobile: horizontal category buttons -->
-          <div class="sm:hidden -mx-4 px-4 overflow-x-auto pt-16">
-            <div id="categoryButtons" class="flex gap-2 min-w-max">
-              <!-- Buttons go here -->
-            </div>
-          </div>
+          <div class="sm:hidden mt-4 mb-4">
+            <label for="mobile-category-select" class="block text-sm font-semibold mb-1">Category</label>
+            <select id="mobile-category-select" class="w-full p-2 border rounded">
+              <!-- Options will be inserted dynamically -->
+            </select>
+          </div>          
 
           <!-- Desktop: vertical sidebar -->
           <div class="hidden sm:block sticky top-24">

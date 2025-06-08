@@ -224,10 +224,10 @@ const supabase = window.supabase.createClient(
 async function loadInventory(selectedCategory = "All") {
 
   const container = document.getElementById("product-list");
-  const categoryBtnContainerMobile = document.getElementById("categoryButtons");
   const categoryBtnContainerDesktop = document.getElementById("categoryButtonsDesktop");
+  const mobileCategorySelect = document.getElementById("mobile-category-select");
 
-  if (!container || !categoryBtnContainerMobile || !categoryBtnContainerDesktop) return;
+  if (!container || !categoryBtnContainerDesktop) return;
  // Skip on pages other than shop.html
 
   const { data, error } = await supabase.from("inventory").select("*");
@@ -246,8 +246,10 @@ async function loadInventory(selectedCategory = "All") {
   const allCategories = [...new Set(data.map(item => item.category))].sort();
   const categories = ["All", ...allCategories];
 
-  categoryBtnContainerMobile.innerHTML = "";
   categoryBtnContainerDesktop.innerHTML = "";
+  if (mobileCategorySelect) {
+    mobileCategorySelect.innerHTML = "";
+  }  
 
   categories.forEach(cat => {
     const label = cat === "All"
@@ -267,14 +269,25 @@ async function loadInventory(selectedCategory = "All") {
         ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}
       `;
 
-
+      if (mobileCategorySelect) {
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent = label;
+        mobileCategorySelect.appendChild(option);
+      }
+      
       btn.addEventListener("click", () => loadInventory(cat));
       return btn;
     };
   
-    categoryBtnContainerMobile.appendChild(createBtn());
+    // categoryBtnContainerMobile.appendChild(createBtn());
     categoryBtnContainerDesktop.appendChild(createBtn());
   });
+
+  if (mobileCategorySelect) {
+    mobileCategorySelect.value = selectedCategory;
+    mobileCategorySelect.onchange = (e) => loadInventory(e.target.value);
+  }  
 
   // 🧸 Render product cards
   container.innerHTML = "";
