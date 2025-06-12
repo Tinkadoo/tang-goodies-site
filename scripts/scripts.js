@@ -1,38 +1,54 @@
+// ==============================================================
+// Global Constants & Setup
+// ==============================================================
+
+// Local storage key for cart data
 const STORAGE_KEY = "cart";
 let cartData = loadCart();
 
-
+// DOM references for cart-related elements
 const cartItemsContainer = document.getElementById("cart-items");
 const subtotalEl = document.getElementById("subtotal");
 const checkoutBtn = document.getElementById("checkout-btn");
 const emptyMessage = document.getElementById("empty-message");
 const placeOrderBtn = document.getElementById("place-order-btn");
 
-function nextImage(button) {
-    const slider = button.closest('.product-card').querySelectorAll('.slider-img');
-    let currentIndex = Array.from(slider).findIndex(img => img.classList.contains('active'));
-  
-    // Remove 'active' from current
-    slider[currentIndex].classList.remove('active');
-  
-    // Add 'active' to next (wrap around)
-    const nextIndex = (currentIndex + 1) % slider.length;
-    slider[nextIndex].classList.add('active');
-  }
-  
-function prevImage(button) {
-  const slider = button.closest('.product-card').querySelectorAll('.slider-img');
-  let currentIndex = Array.from(slider).findIndex(img => img.classList.contains('active'));
+// Supabase client initialization
+const supabase = window.supabase.createClient(
+  'https://zfkbcmrvbmsikabwpjrh.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpma2JjbXJ2Ym1zaWthYndwanJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MTY2MTAsImV4cCI6MjA2NDA5MjYxMH0.kQ6g8Ief2IRDzWMsatT2KtxfROHDT1HvGll7mMNsSg8'
+);
 
-  // Remove 'active' from current
-  slider[currentIndex].classList.remove('active');
+// ==============================================================
+// Global Cart Utilities
+// ==============================================================
 
-  // Add 'active' to previous (wrap around)
-  const prevIndex = (currentIndex - 1 + slider.length) % slider.length;
-  slider[prevIndex].classList.add('active');
+function loadCart() {
+  // Load cart data from localStorage
+  // 1. Called as soon as the page loads (any page that includes scripts.js), 
+  //    to restore previously saved cart state.
+  // 2. Also called whenever the shopper clicks "Add to Cart", or adjusts item 
+  //    quantity (increase/decrease), to ensure cartData stays in sync with localStorage.
+  const saved = localStorage.getItem(STORAGE_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveCart() {
+
+  // Save cart data to localStorage
+  // Called after any change to cartData (e.g., item added, quantity changed, item removed) to persist the latest cart state across page reloads or navigation.
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartData));
 }
 
 function updateCartCount() {
+  // Update the visible cart count badge shown in the navbar or header
+
+  // Called:
+  // 1. When the page loads (inside DOMContentLoaded)
+  // 2. After adding or removing items from the cart
+  // 3. After increasing or decreasing item quantity
+  // This ensures the shopper always sees the correct number of items in their cart
 
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
@@ -45,6 +61,10 @@ function updateCartCount() {
 }
 
 function getQtyControlsHTML(index, qty) {
+  // Generate quantity control buttons (+ and −) with current quantity displayed
+  // Called:
+  // When a shopper adds an item to the cart or updates item quantity
+  // Used in both shop and cart pages to render the +/− UI controls
   return `
     <div class="flex items-center justify-center space-x-2 py-1 mt-2">
       <button onclick="updateQuantity(${index}, -1)"
@@ -60,38 +80,18 @@ function getQtyControlsHTML(index, qty) {
   `;
 }
 
-  
-function addToCart(name, price, imageUrl, containerId) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const existingItem = cart.find(item => item.name === name);
+// ==============================================================
+// Cart View (Cart Page)
+// ==============================================================
 
-  if (existingItem) {
-    existingItem.qty += 1;
-  } else {
-    cart.push({ name, price, qty: 1, image: imageUrl });
-  }
-
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-
-  const container = document.getElementById(containerId);
-  const itemIndex = cart.findIndex(item => item.name === name);
-  container.innerHTML = getQtyControlsHTML(itemIndex, cart[itemIndex].qty);
-  // container.innerHTML = `<div class="text-black font-semibold mt-4 text-sm">In cart</div>`;
-}
-
-
-function loadCart() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  return saved ? JSON.parse(saved) : [];
-}
-      
-function saveCart() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartData));
-}
-  
-      
 function renderCart() {
+  // Re-render the shopping cart view based on current cartData
+
+  // Called:
+  // When shopper opens the cart page
+  // After shopper adds, removes, or updates quantity of items
+  // Whenever cartData is updated
+
   cartItemsContainer.innerHTML = "";
 
   if (cartData.length === 0) {
@@ -137,6 +137,13 @@ function renderCart() {
 }
 
 function calculateTotal() {
+  // Calculate subtotal, tax, PayPal fee, and total amount
+
+  // Called:
+  // When rendering or updating the cart view
+  // After shopper adds, removes, or updates quantity of items
+  // Used by updateSubtotal to show updated pricing
+
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
   const tax = subtotal * 0.0825;
   const fee = subtotal > 0 ? (subtotal * 0.0299 + 0.49) : 0;
@@ -150,8 +157,13 @@ function calculateTotal() {
   };
 }
 
-
 function updateSubtotal() {
+  // Update displayed price details on the cart page including subtotal, tax, PayPal fee, and total
+
+  // Called:
+  // Whenever the cart is updated (item added, removed, or quantity changed)
+  // Whenever the cart view is rendered
+
   const { subtotal, tax, fee, total } = calculateTotal();
 
   // Update UI
@@ -163,42 +175,12 @@ function updateSubtotal() {
   updateCheckoutState();
 }
 
-
-function updateQuantity(index, change) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  if (!cart[index]) return;
-
-  cart[index].qty = Math.max(1, cart[index].qty + change);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  cartData = cart; // Keep in sync
-  updateCartCount();
-
-  // Determine whether we are on the cart page or shop page
-  const isCartPage = !!document.getElementById("cart-items");
-
-  if (isCartPage) {
-    renderCart(); // Full re-render for cart page
-  } else {
-    // Update just the quantity controls in-place for shop page
-    const item = cart[index];
-    const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
-    const container = document.getElementById(containerId);
-    if (container) {
-      container.innerHTML = getQtyControlsHTML(index, item.qty);
-    }
-  }
-}
-
-      
-function removeItem(index) {
-    cartData.splice(index, 1);
-    saveCart();
-    renderCart();
-    updateCartCount();
-}
-
-
 function updateCheckoutState() {
+  // Controls the checkout button state and warning message based on subtotal
+
+  // Called:
+  // After cart updates or when subtotal is recalculated
+
   const { subtotal } = calculateTotal();
   const isDisabled = cartData.length === 0 || subtotal < 10;
 
@@ -214,14 +196,25 @@ function updateCheckoutState() {
   }
 }
 
+function removeItem(index) {
+  // Remove item from cart based on its index
+  // This happens when shopper clicks the trash icon in the cart
+
+  cartData.splice(index, 1);       // Remove the item from cartData array
+  saveCart();                      // Save updated cart to localStorage
+  renderCart();                    // Re-render the cart with updated items
+  updateCartCount();              // Update the cart count badge in the header
+}
 
 
-const supabase = window.supabase.createClient(
-  'https://zfkbcmrvbmsikabwpjrh.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpma2JjbXJ2Ym1zaWthYndwanJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MTY2MTAsImV4cCI6MjA2NDA5MjYxMH0.kQ6g8Ief2IRDzWMsatT2KtxfROHDT1HvGll7mMNsSg8'
-);
+
+// ==============================================================
+// Product Display (Shop Page)
+// ==============================================================
 
 async function loadInventory(selectedCategory = "All") {
+  // Load and display inventory items, filtered by category and stock status. 
+  // Triggered on shop page load and whenever the category or toggle is changed.
 
   const container = document.getElementById("product-list");
   const categoryBtnContainerDesktop = document.getElementById("categoryButtonsDesktop");
@@ -348,7 +341,89 @@ async function loadInventory(selectedCategory = "All") {
   });
 }
 
+function prevImage(button) {
+  // Show the previous image in the product image slider when the left arrow is clicked
+
+  const slider = button.closest('.product-card').querySelectorAll('.slider-img');
+  let currentIndex = Array.from(slider).findIndex(img => img.classList.contains('active'));
+
+  // Remove 'active' from current
+  slider[currentIndex].classList.remove('active');
+
+  // Add 'active' to previous (wrap around)
+  const prevIndex = (currentIndex - 1 + slider.length) % slider.length;
+  slider[prevIndex].classList.add('active');
+}
+
+function nextImage(button) {
+  // Show the next image in the product image slider when the right arrow is clicked
+    const slider = button.closest('.product-card').querySelectorAll('.slider-img');
+    let currentIndex = Array.from(slider).findIndex(img => img.classList.contains('active'));
+  
+    // Remove 'active' from current
+    slider[currentIndex].classList.remove('active');
+  
+    // Add 'active' to next (wrap around)
+    const nextIndex = (currentIndex + 1) % slider.length;
+    slider[nextIndex].classList.add('active');
+}
+
+function addToCart(name, price, imageUrl, containerId) {
+  // Add a product to the cart or increase its quantity if it already exists
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingItem = cart.find(item => item.name === name);
+
+  if (existingItem) {
+    existingItem.qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1, image: imageUrl });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+
+  const container = document.getElementById(containerId);
+  const itemIndex = cart.findIndex(item => item.name === name);
+  container.innerHTML = getQtyControlsHTML(itemIndex, cart[itemIndex].qty);
+}
+
+function updateQuantity(index, change) {
+  // Update the quantity of a cart item based on shopper's click on + or −
+  // Ensures a minimum quantity of 1 and updates both localStorage and the UI
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  if (!cart[index]) return;
+
+  cart[index].qty = Math.max(1, cart[index].qty + change);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  cartData = cart; // Keep in sync
+  updateCartCount();
+
+  // Determine whether we are on the cart page or shop page
+  const isCartPage = !!document.getElementById("cart-items");
+
+  if (isCartPage) {
+    renderCart(); // Full re-render for cart page
+  } else {
+    // Update just the quantity controls in-place for shop page
+    const item = cart[index];
+    const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = getQtyControlsHTML(index, item.qty);
+    }
+  }
+}
+
+   
+// ==============================================================
+// DOMContentLoaded Listener
+// ==============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Run once when DOM is fully loaded: setup initial state and bind all UI event handlers
+  
   updateCartCount();
   loadInventory();
 
