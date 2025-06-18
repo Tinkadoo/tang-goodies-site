@@ -65,6 +65,11 @@ function getQtyControlsHTML(index, qty) {
   // Called:
   // When a shopper adds an item to the cart or updates item quantity
   // Used in both shop and cart pages to render the +/− UI controls
+
+  const cartItem = cartData[index];
+  const maxQty = cartItem?.stock || Infinity;
+  const isMaxed = qty >= maxQty;
+
   return `
     <div class="flex items-center justify-center space-x-2 py-1 mt-2">
       <button onclick="updateQuantity(${index}, -1)"
@@ -73,7 +78,9 @@ function getQtyControlsHTML(index, qty) {
       </button>
       <span class="min-w-[24px] w-6 text-center text-sm font-semibold">${qty}</span>
       <button onclick="updateQuantity(${index}, 1)"
-        class="bg-yellow-300 hover:bg-yellow-500 text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all">
+        class="text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all
+        ${isMaxed ? 'bg-gray-300 cursor-not-allowed pointer-events-none' : 'bg-yellow-300 hover:bg-yellow-500'}"
+        title="${isMaxed ? 'Max stock reached' : ''}">
         +
       </button>
     </div>
@@ -326,7 +333,7 @@ async function loadInventory(selectedCategory = "All") {
         </div>
         <div id="${safeName}-btn">
           <button
-            onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn')"
+            onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn', ${item.stock})"
             class="bg-yellow-300 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm 
                   ${item.stock === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500'}"
             ${item.stock === 0 ? 'disabled' : ''}>
@@ -368,16 +375,17 @@ function nextImage(button) {
     slider[nextIndex].classList.add('active');
 }
 
-function addToCart(name, price, imageUrl, containerId) {
+function addToCart(name, price, imageUrl, containerId, stock) {
   // Add a product to the cart or increase its quantity if it already exists
 
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   const existingItem = cart.find(item => item.name === name);
 
   if (existingItem) {
+    if (existingItem.qty >= stock) return;  // ❌ Do nothing if maxed
     existingItem.qty += 1;
   } else {
-    cart.push({ name, price, qty: 1, image: imageUrl });
+    cart.push({ name, price, qty: 1, image: imageUrl, stock });
   }
 
   localStorage.setItem('cart', JSON.stringify(cart));
@@ -395,7 +403,11 @@ function updateQuantity(index, change) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   if (!cart[index]) return;
 
-  cart[index].qty = Math.max(1, cart[index].qty + change);
+  const maxQty = cart[index].stock || Infinity; // fallback if stock missing
+  const newQty = cart[index].qty + change;
+  if (newQty > maxQty) return;  // ❌ Silently ignore if maxed
+  cart[index].qty = Math.max(1, newQty);
+
   localStorage.setItem('cart', JSON.stringify(cart));
   cartData = cart; // Keep in sync
   updateCartCount();
