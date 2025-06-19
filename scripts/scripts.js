@@ -556,11 +556,12 @@ document.addEventListener("DOMContentLoaded", () => {
     paypal.Buttons({
       createOrder: function(data, actions) {
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const { subtotal, tax, fee, total } = calculateTotal(); 
         console.log(subtotal, tax, fee, total)
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: total
+              value: total.toFixed(2) 
             }
           }]
         });
