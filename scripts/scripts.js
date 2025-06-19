@@ -594,10 +594,6 @@ document.addEventListener("DOMContentLoaded", () => {
           for (const item of cart) {
             const newStock = item.stock - item.qty;
 
-            console.log(`[Inventory update] ${item.name} (ID: ${item.id}): ${item.stock} - ${item.qty} = ${newStock}`);
-            console.log(`ID:`, item.id, `Type:`, typeof item.id);
-
-
             const { data: updateData, error: updateError } = await supabase
               .from("inventory")
               .update({ stock: newStock })
