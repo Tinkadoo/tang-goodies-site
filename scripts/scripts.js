@@ -248,8 +248,6 @@ function setQuantity(index, value) {
   }
 }
 
-
-
 async function loadInventory(selectedCategory = "All") {
   const container = document.getElementById("product-list");
   const categoryBtnContainerDesktop = document.getElementById("categoryButtonsDesktop");
@@ -443,6 +441,66 @@ function updateQuantity(index, change) {
   }
 }
 
+// ==============================================================
+// Checkout Page
+// ==============================================================
+
+async function submitOrder(paymentId, amount) {
+  
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  const orderData = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    address: document.getElementById("address").value,
+    city: document.getElementById("city").value,
+    state: document.getElementById("state").value,
+    zip: document.getElementById("zip-checkout").value,
+    notes: document.getElementById("notes").value,
+    items: cart,
+    payment_id: paymentId,
+    amount,
+    source: window.location.origin,
+    created_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase.from("orders").insert([orderData]);
+
+  if (!error) {
+    // success logic...
+  } else {
+    console.error("❌ Supabase insert error:", error);  // ADD THIS
+    alert("Failed to save order.");
+  }
+
+  if (!error) {
+    for (const item of cart) {
+      const newStock = item.stock - item.qty;
+
+      const { data: updateData, error: updateError } = await supabase
+        .from("inventory")
+        .update({ stock: newStock })
+        .match({ id: item.id });
+
+      if (updateError) {
+        console.error(`❌ Failed to update stock for ${item.name}:`, updateError);
+      } else {
+        console.log(`✅ Stock updated for ${item.name}:`, updateData);
+      }
+    }
+
+    document.getElementById("order-confirmation").classList.remove("hidden");
+    document.getElementById("checkout-form").classList.add("hidden");
+    localStorage.removeItem("cart");
+    updateCartCount();
+  } else {
+    alert("Failed to save order.");
+    console.error("Supabase error:", error.message);
+  }
+}
+
+
    
 // ==============================================================
 // DOMContentLoaded Listener
@@ -550,6 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkoutForm = document.getElementById("checkout-form");
   const confirmation = document.getElementById("order-confirmation");
   const paypalButtonContainer = document.getElementById("paypal-button-container");
+  const payCashBtn = document.getElementById("pay-cash-btn");
 
   if (checkoutForm && confirmation) {
 
@@ -567,11 +626,19 @@ document.addEventListener("DOMContentLoaded", () => {
       checkoutForm.querySelector(`input[id="${field}"]`)
     );
     
-    // Enable PayPal button only if all required fields are filled
+    // Enable payment buttons only if all required fields are filled
     function validateFormInputs() {
       const allFilled = inputElements.every(input => input.value.trim());
-      if (allFilled) {
-        paypalButtonContainer.classList.remove("pointer-events-none", "opacity-50");
+    
+      if (payCashBtn) {
+        payCashBtn.disabled = !allFilled;
+        payCashBtn.classList.toggle("opacity-50", !allFilled);
+        payCashBtn.classList.toggle("pointer-events-none", !allFilled);
+      }
+    
+      if (paypalButtonContainer) {
+        paypalButtonContainer.classList.toggle("opacity-50", !allFilled);
+        paypalButtonContainer.classList.toggle("pointer-events-none", !allFilled);
       }
     }
     
@@ -597,60 +664,29 @@ document.addEventListener("DOMContentLoaded", () => {
           }]
         });
       },
+
       onApprove: async function(data, actions) {
         const details = await actions.order.capture();
-          
-        // Build order data
-        const orderData = {
-          name: document.getElementById("name").value,
-          phone: document.getElementById("phone").value,
-          email: document.getElementById("email").value,
-          address: document.getElementById("address").value,
-          city: document.getElementById("city").value,
-          state: document.getElementById("state").value,
-          zip: document.getElementById("zip-checkout").value,
-          notes: document.getElementById("notes").value,
-          items: cart,
-          payment_id: details.id,
-          amount: details.purchase_units[0].amount.value,
-          source: window.location.origin,
-          created_at: new Date().toISOString()
-        };
-
-        // Save to Supabase
-        const { error } = await supabase.from("orders").insert([orderData]);
-
-        if (!error) {
-          // ✅ Deduct stock from inventory
-          for (const item of cart) {
-            const newStock = item.stock - item.qty;
-
-            const { data: updateData, error: updateError } = await supabase
-              .from("inventory")
-              .update({ stock: newStock })
-              .match({ id: item.id }) 
-              .select(); // 👈 force return data for debugging
-
-            if (updateError) {
-              console.error(`❌ Failed to update stock for ${item.name}:`, updateError);
-            } else {
-              console.log(`✅ Stock updated for ${item.name}:`, updateData);
-            }
-
-          }
-      
-          confirmation.classList.remove("hidden");
-          checkoutForm.classList.add("hidden");
-          localStorage.removeItem("cart");
-          updateCartCount();
-        } else {
-          alert("Failed to save order.");
-          console.error("Supabase error:", error.message);
-        }
-
+        await submitOrder(details.id, details.purchase_units[0].amount.value);
       }
+      
     }).render('#paypal-button-container');
   }
+
+  if (payCashBtn) {
+    payCashBtn.addEventListener("click", async (e) => {
+      e.preventDefault(); // ⛔ prevent default form submit behavior
+      try {
+        const { total } = calculateTotal();
+        await submitOrder("cash", total.toFixed(2));
+      } catch (err) {
+        console.error("💥 Cash order failed:", err);
+        alert("Something went wrong submitting your cash order.");
+      }
+    });
+    
+  }
+
 });
 
 
