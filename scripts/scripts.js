@@ -300,7 +300,7 @@ async function loadInventory(selectedCategory = "All") {
       const buttonText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
       const disabledAttr = isOutOfStock ? 'disabled' : '';
       buttonHTML = '<button ' +
-        `onclick="addToCart('${escapedName}', ${item.price}, '${imageUrl}', '${safeName}-btn', ${item.stock})" ` +
+        `onclick="addToCart(${item.id}, '${escapedName}', ${item.price}, '${imageUrl}', '${safeName}-btn', ${item.stock})" ` +
         `class="bg-yellow-300 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm ${buttonClass}" ` +
         `${disabledAttr}>${buttonText}</button>`;
     }
@@ -359,7 +359,7 @@ function nextImage(button) {
     slider[nextIndex].classList.add('active');
 }
 
-function addToCart(name, price, imageUrl, containerId, stock) {
+function addToCart(id, name, price, imageUrl, containerId, stock) {
   // Add a product to the cart or increase its quantity if it already exists
 
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -369,7 +369,7 @@ function addToCart(name, price, imageUrl, containerId, stock) {
     if (existingItem.qty >= stock) return;  // ❌ Do nothing if maxed
     existingItem.qty += 1;
   } else {
-    cart.push({ name, price, qty: 1, image: imageUrl, stock });
+    cart.push({ id, name, price, qty: 1, image: imageUrl, stock });
   }
 
   localStorage.setItem('cart', JSON.stringify(cart));
@@ -590,6 +590,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const { error } = await supabase.from("orders").insert([orderData]);
 
         if (!error) {
+          // ✅ Deduct stock from inventory
+          for (const item of cart) {
+            const newStock = item.stock - item.qty;
+
+            console.log(`[Inventory update] ${item.name} (ID: ${item.id}): ${item.stock} - ${item.qty} = ${newStock}`);
+            console.log(`ID:`, item.id, `Type:`, typeof item.id);
+
+
+            const { data: updateData, error: updateError } = await supabase
+              .from("inventory")
+              .update({ stock: newStock })
+              .match({ id: item.id }) 
+              .select(); // 👈 force return data for debugging
+
+            if (updateError) {
+              console.error(`❌ Failed to update stock for ${item.name}:`, updateError);
+            } else {
+              console.log(`✅ Stock updated for ${item.name}:`, updateData);
+            }
+
+          }
+      
           confirmation.classList.remove("hidden");
           checkoutForm.classList.add("hidden");
           localStorage.removeItem("cart");
@@ -598,6 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Failed to save order.");
           console.error("Supabase error:", error.message);
         }
+
       }
     }).render('#paypal-button-container');
   }
