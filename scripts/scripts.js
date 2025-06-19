@@ -61,11 +61,6 @@ function updateCartCount() {
 }
 
 function getQtyControlsHTML(index, qty) {
-  // Generate quantity control buttons (+ and −) with current quantity displayed
-  // Called:
-  // When a shopper adds an item to the cart or updates item quantity
-  // Used in both shop and cart pages to render the +/− UI controls
-
   const cartItem = cartData[index];
   const maxQty = cartItem?.stock || Infinity;
   const isMaxed = qty >= maxQty;
@@ -76,7 +71,12 @@ function getQtyControlsHTML(index, qty) {
         class="bg-yellow-300 hover:bg-yellow-500 text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all">
         −
       </button>
-      <span class="min-w-[24px] w-6 text-center text-sm font-semibold">${qty}</span>
+      <input type="number"
+             value="${qty}"
+             min="1"
+             max="${maxQty}"
+             onchange="setQuantity(${index}, this.value)"
+             class="w-12 text-center border rounded" />
       <button onclick="updateQuantity(${index}, 1)"
         class="text-black text-base font-semibold w-10 h-8 rounded-md shadow flex items-center justify-center transition-all
         ${isMaxed ? 'bg-gray-300 cursor-not-allowed pointer-events-none' : 'bg-yellow-300 hover:bg-yellow-500'}"
@@ -86,6 +86,7 @@ function getQtyControlsHTML(index, qty) {
     </div>
   `;
 }
+
 
 // ==============================================================
 // Cart View (Cart Page)
@@ -218,6 +219,36 @@ function removeItem(index) {
 // ==============================================================
 // Product Display (Shop Page)
 // ==============================================================
+
+function setQuantity(index, value) {
+  let qty = parseInt(value);
+  if (isNaN(qty) || qty < 1) qty = 1;
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const item = cart[index];
+  if (!item) return;
+
+  const maxQty = item.stock || Infinity;
+  qty = Math.min(qty, maxQty);
+
+  item.qty = qty;
+  localStorage.setItem('cart', JSON.stringify(cart));
+  cartData = cart;
+  updateCartCount();
+
+  const isCartPage = !!document.getElementById("cart-items");
+  if (isCartPage) {
+    renderCart();
+  } else {
+    const containerId = item.name.replace(/\s+/g, '-').toLowerCase() + '-btn';
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = getQtyControlsHTML(index, qty);
+    }
+  }
+}
+
+
 
 async function loadInventory(selectedCategory = "All") {
   const container = document.getElementById("product-list");
