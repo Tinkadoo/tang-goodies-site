@@ -220,18 +220,13 @@ function removeItem(index) {
 // ==============================================================
 
 async function loadInventory(selectedCategory = "All") {
-  // Load and display inventory items, filtered by category and stock status. 
-  // Triggered on shop page load and whenever the category or toggle is changed.
-
   const container = document.getElementById("product-list");
   const categoryBtnContainerDesktop = document.getElementById("categoryButtonsDesktop");
   const mobileCategorySelect = document.getElementById("mobile-category-select");
 
   if (!container || !categoryBtnContainerDesktop) return;
-  // Skip on pages other than shop.html
 
   const { data, error } = await supabase.from("inventory").select("*");
-
   if (error) {
     console.error("❌ Error loading inventory:", error.message);
     return;
@@ -241,89 +236,87 @@ async function loadInventory(selectedCategory = "All") {
   const categories = ["All", ...allCategories];
 
   categoryBtnContainerDesktop.innerHTML = "";
-  if (mobileCategorySelect) {
-    mobileCategorySelect.innerHTML = "";
-  }  
+  if (mobileCategorySelect) mobileCategorySelect.innerHTML = "";
 
   categories.forEach(cat => {
-    const label = cat === "All"
-      ? "All"
-      : cat.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-  
-    const createBtn = () => {
-      const btn = document.createElement("button");
-      btn.textContent = label;
-      btn.className = `
-        flex items-center justify-center
-        min-w-fit max-w-full
-        px-4 py-1 text-sm
-        border border-gray-300 rounded-full
-        whitespace-nowrap overflow-hidden truncate
-        hover:bg-yellow-200
-        ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}
-      `;
+    const label = cat === "All" ? "All" : cat.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.className = `
+      flex items-center justify-center
+      min-w-fit max-w-full
+      px-4 py-1 text-sm
+      border border-gray-300 rounded-full
+      whitespace-nowrap overflow-hidden truncate
+      hover:bg-yellow-200
+      ${cat === selectedCategory ? 'bg-yellow-400 text-white font-semibold' : ''}
+    `;
+    btn.addEventListener("click", () => loadInventory(cat));
+    categoryBtnContainerDesktop.appendChild(btn);
 
-      if (mobileCategorySelect) {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = label;
-        mobileCategorySelect.appendChild(option);
-      }
-      
-      btn.addEventListener("click", () => loadInventory(cat));
-      return btn;
-    };
-  
-    // categoryBtnContainerMobile.appendChild(createBtn());
-    categoryBtnContainerDesktop.appendChild(createBtn());
+    if (mobileCategorySelect) {
+      const option = document.createElement("option");
+      option.value = cat;
+      option.textContent = label;
+      mobileCategorySelect.appendChild(option);
+    }
   });
 
   if (mobileCategorySelect) {
     mobileCategorySelect.value = selectedCategory;
     mobileCategorySelect.onchange = (e) => loadInventory(e.target.value);
-  }  
+  }
 
   const isInStockOnly = window.__showInStockOnly === true;
-
   const filtered = data.filter(item => {
     const categoryMatch = selectedCategory === "All" || item.category === selectedCategory;
     const inStockMatch = !isInStockOnly || item.stock > 0;
     return categoryMatch && inStockMatch;
   });
 
-  // 🧸 Render product cards
   container.innerHTML = "";
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
   filtered.forEach(item => {
-
     const safeName = item.name.replace(/\s+/g, '-').toLowerCase();
     const imageFolder = item.image_path;
     const imageList = item.image_list || [];
-
-    // Build dynamic image slider HTML
     const imageSlides = imageList.map((filename, index) => {
       const activeClass = index === 0 ? 'active' : '';
-      // return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} rounded-md" />`;
       return `<img src="../${imageFolder}/${filename}" class="slider-img ${activeClass} h-50 w-full object-contain rounded-md" />`;
-
     }).join('');
+
+    const cartItem = cart.find(ci => ci.name === item.name);
+    const cartIndex = cart.findIndex(ci => ci.name === item.name);
+    const escapedName = item.name.replace(/'/g, "\\'");
+    const imageUrl = `../${imageFolder}/${imageList[0]}`;
+    let buttonHTML;
+
+    if (cartItem) {
+      buttonHTML = getQtyControlsHTML(cartIndex, cartItem.qty);
+    } else {
+      const isOutOfStock = item.stock === 0;
+      const buttonClass = isOutOfStock ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500';
+      const buttonText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
+      const disabledAttr = isOutOfStock ? 'disabled' : '';
+      buttonHTML = '<button ' +
+        `onclick="addToCart('${escapedName}', ${item.price}, '${imageUrl}', '${safeName}-btn', ${item.stock})" ` +
+        `class="bg-yellow-300 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm ${buttonClass}" ` +
+        `${disabledAttr}>${buttonText}</button>`;
+    }
 
     const card = document.createElement("div");
     card.className = "product-card bg-white rounded-lg p-4 shadow-md";
-
     card.innerHTML = `
- 
       <div class="image-slider relative group">
-      ${imageSlides}
+        ${imageSlides}
         <div class="absolute inset-0 flex justify-between items-center px-2 
             opacity-100 sm:opacity-0 sm:group-hover:opacity-70 transition-opacity">
           <button onclick="prevImage(this)" class="bg-white text-black rounded-full p-2 shadow">&larr;</button>
           <button onclick="nextImage(this)" class="bg-white text-black rounded-full p-2 shadow">&rarr;</button>
         </div>
       </div>
-
       <div class="text-center">
-
         <h3 class="text-ml mt-3">${item.name}</h3>
         <div class="mt-1 mb-1">
           <p class="text-pink-600 font-bold text-lg">$${item.price.toFixed(2)} each</p>
@@ -331,22 +324,13 @@ async function loadInventory(selectedCategory = "All") {
             In Stock: ${item.stock}
           </span>
         </div>
-        <div id="${safeName}-btn">
-          <button
-            onclick="addToCart('${item.name}', ${item.price}, '../${imageFolder}/${imageList[0]}', '${safeName}-btn', ${item.stock})"
-            class="bg-yellow-300 text-black font-semibold w-full rounded-lg py-2 mt-2 text-sm 
-                  ${item.stock === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500'}"
-            ${item.stock === 0 ? 'disabled' : ''}>
-            ${item.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-          </button>
-
-        </div>
+        <div id="${safeName}-btn">${buttonHTML}</div>
       </div>
     `;
-
     container.appendChild(card);
   });
 }
+
 
 function prevImage(button) {
   // Show the previous image in the product image slider when the left arrow is clicked
