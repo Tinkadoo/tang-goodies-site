@@ -481,7 +481,8 @@ async function submitOrder(paymentId, amount) {
       const { data: updateData, error: updateError } = await supabase
         .from("inventory")
         .update({ stock: newStock })
-        .match({ id: item.id });
+        .match({ id: item.id })
+        .select();
 
       if (updateError) {
         console.error(`❌ Failed to update stock for ${item.name}:`, updateError);
