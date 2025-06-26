@@ -446,7 +446,7 @@ function updateQuantity(index, change) {
 // Checkout Page
 // ==============================================================
 
-async function submitOrder(paymentId, amount) {
+async function submitOrder(paymentId, subtotal, tax, fee, ttl) {
   
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
@@ -461,12 +461,16 @@ async function submitOrder(paymentId, amount) {
     notes: document.getElementById("notes").value,
     items: cart,
     payment_id: paymentId,
-    amount,
+    subtotal: subtotal,
+    tax: tax, 
+    fee: fee,
+    total: ttl,
     source: window.location.origin,
     created_at: new Date().toISOString()
   };
 
   const { error } = await supabase.from("orders").insert([orderData]);
+
 
   if (!error) {
     // success logic...
@@ -657,11 +661,12 @@ document.addEventListener("DOMContentLoaded", () => {
       createOrder: function(data, actions) {
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
         const { subtotal, tax, fee, total } = calculateTotal(); 
-        console.log(subtotal, tax, fee, total)
+
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: total.toFixed(2) 
+              currency_code: "USD",
+              value: total.toFixed(2)
             }
           }]
         });
@@ -669,7 +674,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       onApprove: async function(data, actions) {
         const details = await actions.order.capture();
-        await submitOrder(details.id, details.purchase_units[0].amount.value);
+        const { subtotal, tax, fee, total } = calculateTotal(); 
+        await submitOrder(details.id, subtotal, tax, fee, total);
       }
       
     }).render('#paypal-button-container');
@@ -679,8 +685,8 @@ document.addEventListener("DOMContentLoaded", () => {
     payCashBtn.addEventListener("click", async (e) => {
       e.preventDefault(); // ⛔ prevent default form submit behavior
       try {
-        const { total } = calculateTotal();
-        await submitOrder("cash", total.toFixed(2));
+        const { subtotal, tax, fee, total } = calculateTotal();
+        await submitOrder("cash", subtotal.toFixed(2), tax.toFixed(2), fee.toFixed(2), total.toFixed(2));
       } catch (err) {
         console.error("💥 Cash order failed:", err);
         alert("Something went wrong submitting your cash order.");
