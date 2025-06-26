@@ -326,7 +326,7 @@ async function loadInventory(selectedCategory = "All") {
     } else {
       const isOutOfStock = item.stock === 0;
       const buttonClass = isOutOfStock ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500';
-      const buttonText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
+      const buttonText = isOutOfStock ? 'Coming Soon' : 'Add to Cart';
       const disabledAttr = isOutOfStock ? 'disabled' : '';
       buttonHTML = '<button ' +
         `onclick="addToCart(${item.id}, '${escapedName}', ${item.price}, '${imageUrl}', '${safeName}-btn', ${item.stock})" ` +
