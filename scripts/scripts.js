@@ -154,7 +154,8 @@ function calculateTotal() {
 
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.qty, 0);
   const tax = subtotal * 0.0825;
-  const fee = subtotal > 0 ? (subtotal * 0.0299 + 0.49) : 0;
+  // const fee = subtotal > 0 ? (subtotal * 0.0299 + 0.49) : 0;
+  const fee = 0;
   const total = subtotal + tax + fee;
 
   return {
